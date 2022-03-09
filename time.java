@@ -392,78 +392,79 @@ class time {
    */
   static void getTime() throws FileNotFoundException{
 
-		Scanner input = new Scanner(new File("GMT.txt"));
-		int current = input.nextInt();
+    Scanner input = new Scanner(new File("GMT.txt"));
+    int current = input.nextInt();
 
     Date date = Calendar.getInstance().getTime();
     DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
     String strDate = dateFormat.format(date);
-		TimeZone tz = TimeZone.getDefault();
+    TimeZone tz = TimeZone.getDefault();
 
-		if (current == 2)
+    if (current == 2){
       System.out.println(dateFormat.format(date) + " " + tz.getDisplayName());
-		else {
+    }
+    else {
       SimpleDateFormat sdfGhana = new SimpleDateFormat("hh:mm:ss");
       TimeZone tzInGhana = TimeZone.getTimeZone("Africa/Accra");
       sdfGhana.setTimeZone(tzInGhana);
 
       String sDateInGH = sdfGhana.format(date); // Convert to String first
-			System.out.println(sDateInGH + " Ghanaian Standard Time");
-		}
+      System.out.println(sDateInGH + " Ghanaian Standard Time");
+    }
 	}
 
 	public static void main( String args[] ) throws FileNotFoundException {
 
     //
-		//  Parse the form data into a Hashtable.
-		//
+    // Parse the form data into a Hashtable.
+    //
       Hashtable form_data = ReadParse(System.in);
 
     //
-    //Get the action the user chose
+    // Get the action the user chose
     //
-		  String decision = (String)form_data.get("action");
+      String decision = (String)form_data.get("action");
 
     //
-    //Add basic HTML Layout
+    // Add basic HTML Layout
     //
       System.out.println(Header());
       System.out.println(HtmlTop(decision));
 		
     if (decision.equals("display")){
-      getTime();
+        getTime();
     }
-		else {
-			try {
+    else {
+      try {
         FileWriter myWriter = new FileWriter("GMT.txt");
-        
+            
         if (decision.equals("ghana"))
           myWriter.write("0");
 
-				if (decision.equals("za"))
-					myWriter.write("2");
-     				 
-				myWriter.close();
-    	} catch (IOException e) {
-      	System.out.println("An error occurred.");
-      	e.printStackTrace();
-    	}
+        if (decision.equals("za"))
+          myWriter.write("2");
+         				 
+        myWriter.close();
+      } catch (IOException e) {
+        System.out.println("An error occurred.");
+        e.printStackTrace();
+      }
 
-			getTime();
-		}
+      getTime();
+    }
 
-		System.out.print("<form method='POST' action='/cgi-bin/ghanaian.cgi'>\n");
-		System.out.print("<input type='hidden' value='ghana' name='action'>\n");
+    System.out.print("<form method='POST' action='/cgi-bin/ghanaian.cgi'>\n");
+    System.out.print("<input type='hidden' value='ghana' name='action'>\n");
     System.out.print(" <input type='submit'  name='act' value='Switch to Ghanaian Time'/>\n");
     System.out.print("</form>\n");
 
     System.out.print("<br/>\n");
 
-		System.out.print("<form method='POST' action='/cgi-bin/southafrican.cgi'>\n");
+    System.out.print("<form method='POST' action='/cgi-bin/southafrican.cgi'>\n");
     System.out.print("<input type='hidden' value='za' name='action'>\n");
     System.out.print(" <input type='submit'  name='act' value='Switch to South African Time'/>\n");
     System.out.print("</form>\n");
 
-		System.out.println(HtmlBot());
-	}
+    System.out.println(HtmlBot());
+  }
 }
