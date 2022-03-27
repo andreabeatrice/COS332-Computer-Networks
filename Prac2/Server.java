@@ -27,16 +27,15 @@ public class Server{
 
 			String line = "";
 
-
 			while (!line.equals("QUIT")) {
 				try {
+					line = in.readUTF();
 					//System.out.println(line);
 
 					if (line.contains("INSERT")) {
 						System.out.println(insert(line));
 					}
 					if (line.contains("DISPLAY")) {
-						
 						System.out.println(display());
 					}
 					if (line.contains("SEARCH")) {
@@ -104,16 +103,19 @@ public class Server{
 		return result;
 	}
 
+
 	public String search(String en){
 		String result = "\nSEARCH RESULTS: \n";
 		String searchterm = en.substring(8, en.length()-1);
 
+
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
-      		while (input.hasNext()){
-      			if (input.next().contains(searchterm)) {
-      				result += input.next()+"\n";
+      		while (input.hasNextLine()){
+      			String line = input.nextLine();
+      			if (line.contains(searchterm)){
+      				result += input.next() +"\n";
       			}
       			
       		}

@@ -17,12 +17,11 @@ public class Client{
 			System.out.println("Connected");
 			System.out.println("******Server Commands***** \n\nDISPLAY - Print database");
 			
-			System.out.println("SEARCH (<friend name> || <friend cell number>) - Searches the database for a record with the given parameter");
+			System.out.println("SEARCH (<friend name>) - Searches the database for a record with the given parameter");
 			System.out.println("INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
 			System.out.println("DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
 			System.out.println("QUIT - Ends interaction with the database");
-			System.out.println("UPDATE - Changes a record in the database. Enter ? to see options \n");
-			//System.out.println("UPDATE (<original number>, <new number>) - Changes a record in the database");
+			System.out.println("UPDATE UPDATE (<original name>, <new number> || <new name>)- Changes a record in the database. \n");
 
 			input = new DataInputStream(System.in);
 
