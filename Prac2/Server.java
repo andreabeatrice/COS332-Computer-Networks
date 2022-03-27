@@ -32,9 +32,13 @@ public class Server{
 					//System.out.println(line);
 
 					if (line.contains("INSERT")) {
-						Scanner input = new Scanner(line).useDelimeter("(");
-						String entry = input.next();
-						System.out.println(insert(entry));
+						System.out.println(insert(line));
+					}
+					if (line.contains("DISPLAY")) {
+						System.out.println(display());
+					}
+					if (line.contains("SEARCH")) {
+						System.out.println(search(line));
 					}
 				}
 				catch (IOException i){
@@ -58,21 +62,61 @@ public class Server{
 		String result = "";
 
 		try {
-      		FileWriter myWriter = new FileWriter("database.txt");
+      		FileWriter myWriter = new FileWriter("database.txt", true);
 
-      		String entry = en + "\n";
+      		String entry = en.substring(8, en.length()-1) + "\n";
 
      		myWriter.write(entry);
       		myWriter.close();
       		result = "Successfully wrote to the file.";
 
 	    } catch (IOException e) {
-	      result = System.out.println("An error occurred.");
+	      result = "An error occurred.";
 	    }
 
 		return result;
 	}
 
+	public String display(){
+		String result = "FRIEND, TELEPHONE NUMBER";
+
+		try {
+      		Scanner input = new Scanner(new File("database.txt"));
+
+      		while (input.hasNext()){
+      			result += input.next();
+      		}
+
+      		input.close();
+
+	    } catch (IOException e) {
+	      result = "An error occurred.";
+	    }
+
+		return result;
+	}
+	public String search(String en){
+		String result = "";
+		String searchterm = en.substring(8, en.length()-1);
+
+		try {
+      		Scanner input = new Scanner(new File("database.txt"));
+
+      		while (input.hasNext()){
+      			if (input.next().contains(searchterm)) {
+      				result += input.next();
+      			}
+      			
+      		}
+
+      		input.close();
+
+	    } catch (IOException e) {
+	      result = "An error occurred.";
+	    }
+
+		return result;
+	}
 
 	public static void main(String [] args){
 		Server server = new Server(5000);
