@@ -38,9 +38,11 @@ public class Client{
 		String line = "";
 
 		while (!line.equals("QUIT")) {
+
 				try {
 					line = input.readLine();
 					out.writeUTF(line);
+
 				}
 				catch (IOException i){
 					System.out.println(i);

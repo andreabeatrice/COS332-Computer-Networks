@@ -27,18 +27,16 @@ public class Server{
 
 			String line = "";
 
-			output = new DataOutputStream(socket.getOutputStream());
 
 			while (!line.equals("QUIT")) {
 				try {
-					line = in.readUTF();
 					//System.out.println(line);
 
 					if (line.contains("INSERT")) {
 						System.out.println(insert(line));
 					}
 					if (line.contains("DISPLAY")) {
-						output.writeUTF(display());
+						
 						System.out.println(display());
 					}
 					if (line.contains("SEARCH")) {
