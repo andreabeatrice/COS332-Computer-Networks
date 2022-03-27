@@ -115,7 +115,7 @@ public class Server{
       		while (input.hasNextLine()){
       			String line = input.nextLine();
       			if (line.contains(searchterm)){
-      				result += input.next() +"\n";
+      				result += line +"\n";
       			}
       			
       		}
@@ -132,7 +132,7 @@ public class Server{
 	}
 
 	public String delete(String en){
-		if (!search(en).equals("\nSEARCH RESULTS: \n")){
+		if (search(en).equals("\nSEARCH RESULTS: \n")){
 			return "No record to delete.";
 		}
 
@@ -141,9 +141,10 @@ public class Server{
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
-      		while (input.hasNext()){
-      			if (!input.next().contains(searchterm)) {
-      				result += input.next() +"\n";
+      		while (input.hasNextLine()){
+      			String line = input.nextLine();
+      			if (!line.contains(searchterm)){
+      				result += line +"\n";
       			}
       			
       		}
@@ -165,8 +166,8 @@ public class Server{
 
 
 	public String update(String en){
-		if (!search(en).equals("\nSEARCH RESULTS: \n")){
-			return "No record to update.";
+		if (search(en).equals("\nSEARCH RESULTS: \n")){
+			return "No record to delete.";
 		}
 
 		String searchterm = en.substring(8, en.length()-1);
@@ -174,9 +175,13 @@ public class Server{
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
-      		while (input.hasNext()){
-      			if (!input.next().contains(searchterm)) {
-      				result += input.next() +"\n";
+      		while (input.hasNextLine()){
+      			String line = input.nextLine();
+      			if (!line.contains(searchterm)){
+      				result += line +"\n";
+      			}
+      			else {
+      				
       			}
       			
       		}
@@ -188,7 +193,7 @@ public class Server{
      		myWriter.write(result);
       		myWriter.close();
 
-      		return "Record Successfully Deleted \n";
+      		return "Record Successfully Changed \n";
 
 	    } catch (IOException e) {
 	      return "An error occurred.";

@@ -21,7 +21,7 @@ public class Client{
 			System.out.println("INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
 			System.out.println("DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
 			System.out.println("QUIT - Ends interaction with the database");
-			System.out.println("UPDATE UPDATE (<original name>, <new number> || <new name>)- Changes a record in the database. \n");
+			System.out.println("UPDATE (<original name>, <new number> || <new name>)- Changes a record in the database. \n");
 
 			input = new DataInputStream(System.in);
 
