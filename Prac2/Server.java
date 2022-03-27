@@ -40,6 +40,12 @@ public class Server{
 					if (line.contains("SEARCH")) {
 						System.out.println(search(line));
 					}
+					if (line.contains("DELETE")) {
+						System.out.println(delete(line));
+					}
+					if (line.contains("UPDATE")) {
+						System.out.println(update(line));
+					}
 				}
 				catch (IOException i){
 					System.out.println(i);
@@ -78,11 +84,11 @@ public class Server{
 	}
 
 	public String display(){
-		String result = "FRIEND, TELEPHONE NUMBER \n";
+		String result = "\nFRIEND, TELEPHONE NUMBER \n";
 
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
-      		input.useDelimiter("\n")
+      		input.useDelimiter("\n");
       		while (input.hasNext()){
       			result += input.next() +"\n";
       		}
@@ -95,8 +101,9 @@ public class Server{
 
 		return result;
 	}
+
 	public String search(String en){
-		String result = "";
+		String result = "\nSEARCH RESULTS: \n";
 		String searchterm = en.substring(8, en.length()-1);
 
 		try {
@@ -115,7 +122,74 @@ public class Server{
 	      result = "An error occurred.";
 	    }
 
+
+
 		return result;
+	}
+
+	public String delete(String en){
+		if (!search(en).equals("\nSEARCH RESULTS: \n")){
+			return "No record to delete.";
+		}
+
+		String searchterm = en.substring(8, en.length()-1);
+		String result = "";
+		try {
+      		Scanner input = new Scanner(new File("database.txt"));
+      		input.useDelimiter("\n");
+      		while (input.hasNext()){
+      			if (!input.next().contains(searchterm)) {
+      				result += input.next() +"\n";
+      			}
+      			
+      		}
+
+      		input.close();
+
+      		FileWriter myWriter = new FileWriter("database.txt");
+
+     		myWriter.write(result);
+      		myWriter.close();
+
+      		return "Record Successfully Deleted \n";
+
+	    } catch (IOException e) {
+	      return "An error occurred.";
+	    }
+
+	}
+
+
+	public String update(String en){
+		if (!search(en).equals("\nSEARCH RESULTS: \n")){
+			return "No record to update.";
+		}
+
+		String searchterm = en.substring(8, en.length()-1);
+		String result = "";
+		try {
+      		Scanner input = new Scanner(new File("database.txt"));
+      		input.useDelimiter("\n");
+      		while (input.hasNext()){
+      			if (!input.next().contains(searchterm)) {
+      				result += input.next() +"\n";
+      			}
+      			
+      		}
+
+      		input.close();
+
+      		FileWriter myWriter = new FileWriter("database.txt");
+
+     		myWriter.write(result);
+      		myWriter.close();
+
+      		return "Record Successfully Deleted \n";
+
+	    } catch (IOException e) {
+	      return "An error occurred.";
+	    }
+
 	}
 
 	public static void main(String [] args){
