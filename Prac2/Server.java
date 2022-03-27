@@ -78,13 +78,13 @@ public class Server{
 	}
 
 	public String display(){
-		String result = "FRIEND, TELEPHONE NUMBER";
+		String result = "FRIEND, TELEPHONE NUMBER \n";
 
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
-
+      		input.useDelimiter("\n")
       		while (input.hasNext()){
-      			result += input.next();
+      			result += input.next() +"\n";
       		}
 
       		input.close();
@@ -101,10 +101,10 @@ public class Server{
 
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
-
+      		input.useDelimiter("\n");
       		while (input.hasNext()){
       			if (input.next().contains(searchterm)) {
-      				result += input.next();
+      				result += input.next()+"\n";
       			}
       			
       		}
