@@ -8,6 +8,7 @@ public class Server{
 	private Socket			socket = null;
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
+	private DataOutputStream output = null;
 
 
 	//constructor with port #
@@ -26,6 +27,8 @@ public class Server{
 
 			String line = "";
 
+			output = new DataOutputStream(socket.getOutputStream());
+
 			while (!line.equals("QUIT")) {
 				try {
 					line = in.readUTF();
@@ -35,6 +38,7 @@ public class Server{
 						System.out.println(insert(line));
 					}
 					if (line.contains("DISPLAY")) {
+						output.writeUTF(display());
 						System.out.println(display());
 					}
 					if (line.contains("SEARCH")) {
