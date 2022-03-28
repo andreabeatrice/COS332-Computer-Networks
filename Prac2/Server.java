@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.net.*;
 
 public class Server{
 
@@ -8,6 +9,7 @@ public class Server{
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
 	private DataOutputStream output = null;
+	private PrintStream 		ps = null;
 
 
 	//constructor with port #
@@ -23,6 +25,7 @@ public class Server{
 			System.out.println("Client accepted");
 
 			in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+			ps = new PrintStream(socket.getOutputStream());
 
 			String line = "";
 
@@ -33,6 +36,7 @@ public class Server{
 
 					if (line.contains("INSERT")) {
 						System.out.println(insert(line));
+						ps.print(insert(line));
 					}
 					if (line.contains("DISPLAY")) {
 						System.out.println(display());

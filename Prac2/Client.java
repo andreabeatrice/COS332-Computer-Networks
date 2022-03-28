@@ -7,6 +7,7 @@ public class Client{
 	private Socket			socket = null;
 	private DataInputStream	input = null;
 	private DataOutputStream 	out = null;
+	private BufferedReader		bs = null;
 
 
 	//constructor with port #
@@ -26,6 +27,8 @@ public class Client{
 			input = new DataInputStream(System.in);
 
 			out = new DataOutputStream(socket.getOutputStream());
+
+			
 		}
 		catch (UnknownHostException u ){
 			System.out.println(u);
@@ -42,6 +45,8 @@ public class Client{
 					line = input.readLine();
 					out.writeUTF(line);
 
+					bs = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+					System.out.println("Client Side : " + bs.readLine());
 				}
 				catch (IOException i){
 					System.out.println(i);
