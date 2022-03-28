@@ -175,7 +175,7 @@ public class Server{
 		String entry = enTerm.next(); //<original name>
 		String newVal = enTerm.next();
 
-		newVal = newVal.substring(0, newVal.length());
+		newVal = newVal.substring(1, newVal.length()-1);
 		entry = entry.substring(11, entry.length());
 
 		String result = "";
