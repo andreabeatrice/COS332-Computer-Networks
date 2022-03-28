@@ -27,6 +27,8 @@ public class Server{
 			in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 			ps = new PrintStream(socket.getOutputStream());
 
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
 			String line = "";
 
 			while (!line.equals("QUIT")) {
@@ -36,7 +38,7 @@ public class Server{
 
 					if (line.contains("INSERT")) {
 						System.out.println(insert(line));
-						ps.print(insert(line));
+						ps.print(br.readLine());
 					}
 					if (line.contains("DISPLAY")) {
 						System.out.println(display());
