@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.net.*;
 
 public class Server{
 
@@ -165,22 +166,33 @@ public class Server{
 
 
 	public String update(String en){
-		if (search(en).equals("\nSEARCH RESULTS: \n")){
-			return "No record to delete.";
-		}
 
-		String searchterm = en.substring(8, en.length()-1);
+		String searchterm = en.substring(11, en.length()-1);
+		String updatetype = en.substring(8,9);
+
+
+		Scanner enTerm = new Scanner(en).useDelimiter(",");
+		String entry = enTerm.next(); //<original name>
+		String newVal = enTerm.next();
+
 		String result = "";
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
       		while (input.hasNextLine()){
       			String line = input.nextLine();
-      			if (!line.contains(searchterm)){
+      			if (!line.contains(entry)){
       				result += line +"\n";
       			}
       			else {
-      				
+      				Scanner lin = new Scanner(line).useDelimiter(",");
+      				if (updatetype.equals("n")) {
+      					lin.next();
+      					result += newVal + "," + lin.next()+"\n";
+      				}
+      				else {
+      					result += lin.next() + "," + newVal+"\n";
+      				}
       			}
       			
       		}
