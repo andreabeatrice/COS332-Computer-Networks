@@ -175,6 +175,9 @@ public class Server{
 		String entry = enTerm.next(); //<original name>
 		String newVal = enTerm.next();
 
+		newVal = newVal.substring(0, newVal.length());
+		entry = entry.substring(11, entry.length());
+
 		String result = "";
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
