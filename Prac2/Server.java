@@ -9,7 +9,6 @@ public class Server{
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
 	private PrintWriter output = null;
-	private int lineNum = 0;
 
 
 	//constructor with port #
@@ -30,8 +29,6 @@ public class Server{
 			
 	BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			//output.write(27);
-			//output.write(10);
 			output.println("Connected" );
 			output.write(13);
 			output.write(10);
@@ -70,13 +67,11 @@ public class Server{
 			output.write(27);
 			output.println("[0G ");
 			
-			lineNum = 11;
 			String line = "";
 
 			while (!line.equals("QUIT")) {
 				try {
 					line = reader.readLine();
-					//System.out.println(line);
 					System.out.println(line);
 
 					if (line.contains("INSERT")) {
@@ -84,8 +79,10 @@ public class Server{
 						output.println(insert(line));
 					}
 					if (line.contains("DISPLAY")) {
-						System.out.println(display());
-						output.println(display());
+					//System.out.println(display());
+						output.write(13);
+						output.write(10);
+						display();
 					}
 					if (line.contains("SEARCH")) {
 						output.println(search(line));
@@ -137,26 +134,31 @@ public class Server{
 		return result;
 	}
 
-	public String display(){
-		String result = "\nFRIEND, TELEPHONE NUMBER \n";
-		String nl = "\033[J"; //7;0H
-		lineNum++;
+	public void display(){
+		output.println("FRIEND, TELEPHONE NUMBER");
+
 
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
       		while (input.hasNext()){
-				//nl = nl + lineNum + ";0H";
-      			result += nl + input.next();
+				output.write(13);
+				output.write(10);
+				output.println(input.next());
+      			//result += nl + input.next();
       		}
 
       		input.close();
 
 	    } catch (IOException e) {
-	      result = "An error occurred.";
+	      //result = "An error occurred.";
 	    }
 
-		return result;
+		//return result;
+		output.write(13);
+		output.write(10);
+		output.write(27);
+		output.println("[0G ");
 	}
 
 
