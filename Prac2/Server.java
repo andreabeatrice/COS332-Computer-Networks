@@ -9,6 +9,7 @@ public class Server{
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
 	private PrintWriter output = null;
+	private int lineNum = 0;
 
 
 	//constructor with port #
@@ -27,21 +28,49 @@ public class Server{
 
 			output = new PrintWriter(socket.getOutputStream(), true);
 			
-			 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-
-			output.println(" Connected" );
-			output.println("\033[2;0H ******Server Commands*****");
-			output.println("\033[3;0H DISPLAY - Print database");
+			//output.write(27);
+			//output.write(10);
+			output.println("Connected" );
+			output.write(13);
+			output.write(10);
+			output.println("******Server Commands*****");
+			output.write(13);
+			output.write(10);
+			output.println("DISPLAY - Print database");
 			
-			output.println("\033[4;0H SEARCH (<friend name>) - Searches the database for a record with the given parameter");
-			output.println("\033[5;0H INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
-			output.println("\033[6;0H DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
-			output.println("\033[7;0H QUIT - Ends interaction with the database.");
-			output.println("\033^J UPDATE - Changes a record in the database.");
-			output.println("\033[9;0H \033^I UPDATE -n (<original name>, <new name>)");
-			output.println("\033[10;0H \033^I UPDATE -t (<original name>, <new number>)");
-
+			output.write(13);
+			output.write(10);
+			output.println("SEARCH (<friend name>) - Searches the database for a record with the given parameter");
+			output.write(13);
+			output.write(10);
+			output.println("INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
+			output.write(13);
+			output.write(10);
+			output.println("DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter");
+			output.write(13);
+			output.write(10);
+			output.println("QUIT - Ends interaction with the database.");
+			output.write(13);
+			output.write(10);
+			
+			output.println("UPDATE - Changes a record in the database.");
+			output.write(13);
+			output.write(10);
+			output.write(9);
+			output.println("UPDATE -n (<original name>, <new name>)");
+			output.write(13);
+			output.write(10);
+			output.write(9);
+			output.println("UPDATE -t (<original name>, <new number>)");
+			output.write(13);
+			output.write(10);
+			
+			output.write(27);
+			output.println("[0G ");
+			
+			lineNum = 11;
 			String line = "";
 
 			while (!line.equals("QUIT")) {
@@ -110,12 +139,15 @@ public class Server{
 
 	public String display(){
 		String result = "\nFRIEND, TELEPHONE NUMBER \n";
+		String nl = "\033[J"; //7;0H
+		lineNum++;
 
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
       		while (input.hasNext()){
-      			result += input.next() +"\n";
+				//nl = nl + lineNum + ";0H";
+      			result += nl + input.next();
       		}
 
       		input.close();
