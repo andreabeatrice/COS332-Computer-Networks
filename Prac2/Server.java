@@ -25,9 +25,18 @@ public class Server{
 
 			in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
-			out = new PrintWriter(socket.getOutputStream(), true);
+			output = new PrintWriter(socket.getOutputStream(), true);
 
-			out.println("test");
+			output.println("Connected");
+			output.println("******Server Commands***** \n\nDISPLAY - Print database");
+			
+			output.println("SEARCH (<friend name>) - Searches the database for a record with the given parameter");
+			output.println("INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
+			output.println("DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
+			output.println("QUIT - Ends interaction with the database.\n");
+			output.println("UPDATE - Changes a record in the database.\n");
+			output.println("\tUPDATE -n (<original name>, <new name>)\n");
+			output.println("\tUPDATE -t (<original name>, <new number>)\n");
 
 			String line = "";
 
@@ -37,23 +46,23 @@ public class Server{
 					//System.out.println(line);
 
 					if (line.contains("INSERT")) {
-						System.out.println(insert(line));
+						output.println(insert(line));
 					}
 					if (line.contains("DISPLAY")) {
-						System.out.println(display());
+						output.println(display());
 					}
 					if (line.contains("SEARCH")) {
-						System.out.println(search(line));
+						output.println(search(line));
 					}
 					if (line.contains("DELETE")) {
-						System.out.println(delete(line));
+						output.println(delete(line));
 					}
 					if (line.contains("UPDATE")) {
-						System.out.println(update(line));
+						output.println(update(line));
 					}
 				}
 				catch (IOException i){
-					System.out.println(i);
+					output.println(i);
 				}
 			}
 
