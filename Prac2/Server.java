@@ -26,29 +26,39 @@ public class Server{
 			in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
 			output = new PrintWriter(socket.getOutputStream(), true);
-
-			output.println("Connected");
-			output.println("******Server Commands***** \n\nDISPLAY - Print database");
 			
-			output.println("SEARCH (<friend name>) - Searches the database for a record with the given parameter");
-			output.println("INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
-			output.println("DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
-			output.println("QUIT - Ends interaction with the database.\n");
-			output.println("UPDATE - Changes a record in the database.\n");
-			output.println("\tUPDATE -n (<original name>, <new name>)\n");
-			output.println("\tUPDATE -t (<original name>, <new number>)\n");
+			 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+
+			output.println(" Connected" );
+			output.println("\033[2;0H ******Server Commands*****");
+			//output.println();
+			//output.println();
+			//output.println("DISPLAY - Print database ");
+			//output.println();
+			
+			//output.println("SEARCH (<friend name>) - Searches the database for a record with the given parameter");
+			//output.println("INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
+			//output.println("DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
+			//output.println("QUIT - Ends interaction with the database.");
+			//output.println("UPDATE - Changes a record in the database.");
+			//output.println("\tUPDATE -n (<original name>, <new name>)");
+			//output.println("\tUPDATE -t (<original name>, <new number>)");
 
 			String line = "";
 
 			while (!line.equals("QUIT")) {
 				try {
-					line = in.readUTF();
+					line = reader.readLine();
 					//System.out.println(line);
+					System.out.println(line);
 
 					if (line.contains("INSERT")) {
+						
 						output.println(insert(line));
 					}
 					if (line.contains("DISPLAY")) {
+						System.out.println(display());
 						output.println(display());
 					}
 					if (line.contains("SEARCH")) {
@@ -59,6 +69,10 @@ public class Server{
 					}
 					if (line.contains("UPDATE")) {
 						output.println(update(line));
+					}
+					if (line.contains("CLEAR")){
+						output.println(clearConsole());
+						output.flush();
 					}
 				}
 				catch (IOException i){
@@ -175,6 +189,11 @@ public class Server{
 	      return "An error occurred.";
 	    }
 
+	}
+	
+	public String clearConsole() {   
+		
+		return "\033[H\033[2J";
 	}
 
 
