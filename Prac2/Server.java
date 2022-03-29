@@ -8,8 +8,12 @@ public class Server{
 	private Socket			socket = null;
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
+<<<<<<< Updated upstream
 	private DataOutputStream output = null;
 	private PrintStream 		ps = null;
+=======
+	private PrintWriter output = null;
+>>>>>>> Stashed changes
 
 
 	//constructor with port #
@@ -23,6 +27,10 @@ public class Server{
 
 			socket = server.accept();
 			System.out.println("Client accepted");
+
+			out = new PrintWriter(socket.getOutputStream(), true);
+
+			out.println("test");
 
 			in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 			ps = new PrintStream(socket.getOutputStream());
