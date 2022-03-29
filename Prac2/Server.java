@@ -32,18 +32,15 @@ public class Server{
 
 			output.println(" Connected" );
 			output.println("\033[2;0H ******Server Commands*****");
-			//output.println();
-			//output.println();
-			//output.println("DISPLAY - Print database ");
-			//output.println();
+			output.println("\033[3;0H DISPLAY - Print database");
 			
-			//output.println("SEARCH (<friend name>) - Searches the database for a record with the given parameter");
-			//output.println("INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
-			//output.println("DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
-			//output.println("QUIT - Ends interaction with the database.");
-			//output.println("UPDATE - Changes a record in the database.");
-			//output.println("\tUPDATE -n (<original name>, <new name>)");
-			//output.println("\tUPDATE -t (<original name>, <new number>)");
+			output.println("\033[4;0H SEARCH (<friend name>) - Searches the database for a record with the given parameter");
+			output.println("\033[5;0H INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
+			output.println("\033[6;0H DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
+			output.println("\033[7;0H QUIT - Ends interaction with the database.");
+			output.println("\033^J UPDATE - Changes a record in the database.");
+			output.println("\033[9;0H \033^I UPDATE -n (<original name>, <new name>)");
+			output.println("\033[10;0H \033^I UPDATE -t (<original name>, <new number>)");
 
 			String line = "";
 
