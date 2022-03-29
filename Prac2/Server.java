@@ -9,7 +9,6 @@ public class Server{
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
 	private PrintWriter output = null;
-	private int lineNum = 0;
 
 
 	//constructor with port #
@@ -30,8 +29,6 @@ public class Server{
 			
 	BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			//output.write(27);
-			//output.write(10);
 			output.println("Connected" );
 			output.write(13);
 			output.write(10);
@@ -70,31 +67,38 @@ public class Server{
 			output.write(27);
 			output.println("[0G ");
 			
-			lineNum = 11;
 			String line = "";
 
 			while (!line.equals("QUIT")) {
 				try {
 					line = reader.readLine();
-					//System.out.println(line);
 					System.out.println(line);
 
 					if (line.contains("INSERT")) {
-						
-						output.println(insert(line));
+						output.write(13);
+						output.write(10);
+						insert(line);
 					}
 					if (line.contains("DISPLAY")) {
-						System.out.println(display());
-						output.println(display());
+					//System.out.println(display());
+						output.write(13);
+						output.write(10);
+						display();
 					}
 					if (line.contains("SEARCH")) {
-						output.println(search(line));
+						output.write(13);
+						output.write(10);
+						search(line);
 					}
 					if (line.contains("DELETE")) {
-						output.println(delete(line));
+						output.write(13);
+						output.write(10);
+						delete(line);
 					}
 					if (line.contains("UPDATE")) {
-						output.println(update(line));
+						output.write(13);
+						output.write(10);
+						update(line);
 					}
 					if (line.contains("CLEAR")){
 						output.println(clearConsole());
@@ -118,7 +122,7 @@ public class Server{
 	}
 
 
-	public String insert(String en){
+	public void insert(String en){
 		String result = "";
 
 		try {
@@ -128,40 +132,53 @@ public class Server{
 
      		myWriter.write(entry);
       		myWriter.close();
-      		result = "Successfully wrote to the file.";
+      		//result = ;
+      		
+      		output.write(13);
+			output.write(10);
+			output.println("Successfully wrote to the file.");
 
 	    } catch (IOException e) {
-	      result = "An error occurred.";
+	      //result = "An error occurred.";
 	    }
 
-		return result;
+		output.write(13);
+		output.write(10);
+		output.write(27);
+		output.println("[0G ");
 	}
 
-	public String display(){
-		String result = "\nFRIEND, TELEPHONE NUMBER \n";
-		String nl = "\033[J"; //7;0H
-		lineNum++;
+	public void display(){
+		output.println("FRIEND, TELEPHONE NUMBER");
+
 
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
       		while (input.hasNext()){
-				//nl = nl + lineNum + ";0H";
-      			result += nl + input.next();
+				output.write(13);
+				output.write(10);
+				output.println(input.next());
+      			//result += nl + input.next();
       		}
 
       		input.close();
 
 	    } catch (IOException e) {
-	      result = "An error occurred.";
+	      //result = "An error occurred.";
 	    }
 
-		return result;
+		//return result;
+		output.write(13);
+		output.write(10);
+		output.write(27);
+		output.println("[0G ");
 	}
 
 
-	public String search(String en){
-		String result = "\nSEARCH RESULTS: \n";
+	public void search(String en){
+		output.println("SEARCH RESULTS: ");
+
 		String searchterm = en.substring(8, en.length()-1);
 
 
@@ -171,7 +188,9 @@ public class Server{
       		while (input.hasNextLine()){
       			String line = input.nextLine();
       			if (line.contains(searchterm)){
-      				result += line +"\n";
+      				output.write(13);
+					output.write(10);
+					output.println(line);
       			}
       			
       		}
@@ -179,21 +198,21 @@ public class Server{
       		input.close();
 
 	    } catch (IOException e) {
-	      result = "An error occurred.";
+	      //result = "An error occurred.";
 	    }
 
 
-
-		return result;
+	    output.write(13);
+		output.write(10);
+		output.write(27);
+		output.println("[0G ");
 	}
 
-	public String delete(String en){
-		if (search(en).equals("\nSEARCH RESULTS: \n")){
-			return "No record to delete.";
-		}
+	public void delete(String en){
 
 		String searchterm = en.substring(8, en.length()-1);
 		String result = "";
+		boolean del = false;
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
@@ -201,6 +220,9 @@ public class Server{
       			String line = input.nextLine();
       			if (!line.contains(searchterm)){
       				result += line +"\n";
+      			}
+      			else {
+      				del = true;
       			}
       			
       		}
@@ -212,24 +234,40 @@ public class Server{
      		myWriter.write(result);
       		myWriter.close();
 
-      		return "Record Successfully Deleted \n";
+      		if (del) {
+      			output.write(13);
+				output.write(10);
+      			output.println("Record Successfully Deleted");
+      		}
+      		else {
+      			output.write(13);
+				output.write(10);
+      			output.println("Nothing to delete.");
+      		}
+
+      		
+      		output.write(13);
+			output.write(10);
+			output.write(27);
+			output.println("[0G ");
 
 	    } catch (IOException e) {
-	      return "An error occurred.";
+
+	      //return "An error occurred.";
 	    }
 
 	}
 	
 	public String clearConsole() {   
-		
 		return "\033[H\033[2J";
 	}
 
 
-	public String update(String en){
+	public void update(String en){
 
 		String searchterm = en.substring(11, en.length()-1);
 		String updatetype = en.substring(8,9);
+		boolean change = false;
 
 
 		Scanner enTerm = new Scanner(en).useDelimiter(",");
@@ -240,6 +278,7 @@ public class Server{
 		entry = entry.substring(11, entry.length());
 
 		String result = "";
+		
 		try {
       		Scanner input = new Scanner(new File("database.txt"));
       		input.useDelimiter("\n");
@@ -249,6 +288,7 @@ public class Server{
       				result += line +"\n";
       			}
       			else {
+      				change = true;
       				Scanner lin = new Scanner(line).useDelimiter(",");
       				if (updatetype.equals("n")) {
       					lin.next();
@@ -268,10 +308,19 @@ public class Server{
      		myWriter.write(result);
       		myWriter.close();
 
-      		return "Record Successfully Changed \n";
+      		if (change) {
+      			output.write(13);
+				output.write(10);
+      			output.println("Record Successfully Changed");
+      		}
+      		else {
+      			output.write(13);
+				output.write(10);
+      			output.println("Nothing to change.");
+      		}
 
 	    } catch (IOException e) {
-	      return "An error occurred.";
+	      //return "An error occurred.";
 	    }
 
 	}
