@@ -8,7 +8,7 @@ public class Server{
 	private Socket			socket = null;
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
-	private DataOutputStream output = null;
+	private PrintWriter output = null;
 
 
 	//constructor with port #
@@ -24,6 +24,10 @@ public class Server{
 			System.out.println("Client accepted");
 
 			in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+			out = new PrintWriter(socket.getOutputStream(), true);
+
+			out.println("test");
 
 			String line = "";
 
