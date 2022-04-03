@@ -4,12 +4,12 @@ import com.coderfromscratch.simplehttpserver.config.Configuration;
 import com.coderfromscratch.simplehttpserver.config.ConfigurationManager;
 import com.coderfromscratch.simplehttpserver.core.ServerListenerThread;
 
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
+
 
 /**
  *
@@ -19,6 +19,9 @@ import java.nio.charset.StandardCharsets;
 
 public class SimpleHttpServer{
 
+    //private static System LoggerFactory;
+    //private final static System.Logger LOGGER = LoggerFactory.getLogger(String.valueOf(SimpleHttpServer.class));
+    //public final static Logger = new System.Logger();
     public static void main(String [] args){
 
         /**
