@@ -15,13 +15,12 @@ public class ServerListenerThread extends Thread{
     public ServerListenerThread(int port, String webroot) throws IOException {
         this.port = port;
         this.webroot = webroot;
-        ServerSocket serverSocket = new ServerSocket(this.port);
+        this.serverSocket = new ServerSocket(this.port);
     }
 
     @Override
-    public void run(){
+    public void run() {
         try {
-
             Socket socket = serverSocket.accept();
 
             InputStream is =  socket.getInputStream();
@@ -39,6 +38,11 @@ public class ServerListenerThread extends Thread{
                             CRLF + CRLF;
 
             os.write(response.getBytes());
+
+            is.close();
+            os.close();
+            socket.close();
+            serverSocket.close();
 
         } catch (IOException e) {
             e.printStackTrace();

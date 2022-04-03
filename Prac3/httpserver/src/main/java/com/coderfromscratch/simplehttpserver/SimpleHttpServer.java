@@ -2,6 +2,7 @@ package com.coderfromscratch.simplehttpserver;
 
 import com.coderfromscratch.simplehttpserver.config.Configuration;
 import com.coderfromscratch.simplehttpserver.config.ConfigurationManager;
+import com.coderfromscratch.simplehttpserver.core.ServerListenerThread;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,25 +41,8 @@ public class SimpleHttpServer{
         System.out.println("Using WebRoot: " + conf.getWebroot());
 
         try {
-            ServerSocket serverSocket = new ServerSocket(conf.getPort());
-            Socket socket = serverSocket.accept();
-
-            InputStream is =  socket.getInputStream();
-            OutputStream os = socket.getOutputStream();
-
-            String html = "<html><head><title>Simple Java HTTP Server</title></head><body><h1>Page was served using simple Java HTTP server</h1></body></html>";
-
-            final String CRLF = "\n\r"; //13 10
-
-            String response =
-                    "HTTP/1.1 200 OK" + CRLF + //Status Line   :   HTTP/VERSION RESPONSE_CODE RESPONSE_MESSAGE
-                            "Content-Length: " + html.getBytes().length + CRLF + //HEADER
-                            CRLF +
-                            html +
-                            CRLF + CRLF;
-
-            os.write(response.getBytes());
-
+            ServerListenerThread thread1 = new ServerListenerThread(conf.getPort(), conf.getWebroot());
+            thread1.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
