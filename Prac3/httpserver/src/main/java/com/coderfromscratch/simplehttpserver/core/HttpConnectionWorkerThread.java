@@ -19,7 +19,13 @@ public class HttpConnectionWorkerThread extends Thread{
 
         try {
             is = socket.getInputStream();
-             os = socket.getOutputStream();
+            os = socket.getOutputStream();
+
+        /*  int _byte;
+
+            while ((_byte = is.read()) >= 0){
+                System.out.print((char) _byte);
+            }*/
 
             String html = "<html><head><title>Simple Java HTTP Server</title></head><body><h1>Page was served using simple Java HTTP server</h1></body></html>";
 
