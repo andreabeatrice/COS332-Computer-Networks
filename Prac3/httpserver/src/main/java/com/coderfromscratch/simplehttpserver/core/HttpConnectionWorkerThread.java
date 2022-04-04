@@ -1,12 +1,24 @@
 package com.coderfromscratch.simplehttpserver.core;
 
+import com.coderfromscratch.simplehttpserver.http.Operation;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Scanner;
+
+import static com.coderfromscratch.simplehttpserver.http.Operation.*;
 
 public class HttpConnectionWorkerThread extends Thread{
     private Socket socket;
+
+    private static String value1 = "0";
+    private static String value2 = "0";
+    private static Operation nextOp = NUL;
+    public static String result = "0";
+
+    static final String CRLF = "\n\r"; //13 10
 
     public HttpConnectionWorkerThread(Socket socket) {
         this.socket = socket;
@@ -27,40 +39,39 @@ public class HttpConnectionWorkerThread extends Thread{
         return Top;
 
     }
+    
 
-    public static String calculator()
-    {
+    public static String calculator() {
 
         String body = "<form action=\"\" method=\"\" name=\"calcForm\">";
         body += "\t<table> ";
-        body = body + "\t \t<tr colspan=\"3\"> <input type=\"number\" id=\"display\" name=\"display\" value=\"0\" maxlength=\"10\"> </tr>";
+        body = body + "\t \t<tr colspan=\"3\"> <input style=\"text-align:right\" type=\"text\" id=\"display\" name=\"display\" value=\"" +  result +"\" maxlength=\"10\"> </tr>";
             body = body + "\t \t <tr>";
-                body = body + "\t \t\t<td style=\"width:20px\"><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"1\">1</button></td>";
-                body = body + "\t \t\t<td style=\"width:20px\"><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"2\">2</button></td>";
-                body = body + "\t \t\t<td style=\"width:20px\"><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"3\">3</button></td>";
-                body = body + "\t \t\t<td style=\"width:20px\"><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"A\">&#43;</button></td>";
+                body = body + "\t \t\t<td style=\"width:20px\"><a href=\"1\">1</a></td>";
+                body = body + "\t \t\t<td style=\"width:20px\"><a href=\"2\">2</a></td>";
+                body = body + "\t \t\t<td style=\"width:20px\"><a href=\"3\">3</a></td>";
+                body = body + "\t \t\t<td style=\"width:20px\"><a href=\"ADD\">&#43;</a></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t<tr>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"4\">4</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"5\">5</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"6\">6</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"S\">&#45;</button></td>";
+                body = body + "\t \t\t<td><a href=\"4\">4</a></td>";
+                body = body + "\t \t\t<td><a href=\"5\">5</a></td>";
+                body = body + "\t \t\t<td><a href=\"6\">6</a></td>";
+                body = body + "\t \t\t<td><a href=\"SUB\">&#45;</a></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t<tr>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"7\">7</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"8\">8</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"9\">9</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"M\">&#215;</button></td>";
+                body = body + "\t \t\t<td><a href=\"7\">7</a></td>";
+                body = body + "\t \t\t<td><a href=\"8\">8</a></td>";
+                body = body + "\t \t\t<td><a href=\"9\">9</a></td>";
+                body = body + "\t \t\t<td><a href=\"MUL\">&#215;</a></td>";
             body = body + "\t\t </tr>";
             body = body + "\t\t <tr>";
-                body = body + "\t\t\t <td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"0\">0</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"D\">&#247;</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"E\">&#61;</button></td>";
+                body = body + "\t\t\t <td><a href=\"0\">0</a></td>";
+                body = body + "\t \t\t<td><a href=\"DIV\">&#247;</a></td>";
+                body = body + "\t \t\t<td><a href=\"RES\">&#61;</a></td>";
                 body = body + "\t \t\t<td></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t</tr>";
         body = body + "\t </table></form>";
-
 
         return body;
 
@@ -71,6 +82,41 @@ public class HttpConnectionWorkerThread extends Thread{
         return "</body>\n</html>\n";
     }
 
+    public static void doOperation(Operation o, String v1, String v2){
+        double _v1 = Integer.parseInt(v1);
+        double _v2 = Integer.parseInt(v2);
+
+        switch (o) {
+            case ADD:
+                _v1 += _v2;
+                break;
+            case SUB:
+                _v1 -= _v2;
+                break;
+            case MUL:
+                _v1 *= _v2;
+                break;
+            case DIV:
+                _v1 /= _v2;
+                break;
+        }
+
+        result = String.valueOf(_v1);
+
+    }
+
+    public static String writeResponse(){
+        String html = HtmlTop("332 Practical 3") + calculator() + HtmlBot();
+
+        String response =
+                "HTTP/1.1 200 OK" + CRLF + //Status Line   :   HTTP/VERSION RESPONSE_CODE RESPONSE_MESSAGE
+                        "Content-Length: " + html.getBytes().length + CRLF + //HEADER
+                        CRLF +
+                        html +
+                        CRLF + CRLF;
+        return response;
+    }
+
     @Override
     public void run() {
         InputStream is = null;
@@ -79,25 +125,70 @@ public class HttpConnectionWorkerThread extends Thread{
         try {
             is = socket.getInputStream();
             os = socket.getOutputStream();
+            int _byte;
 
-        /*  int _byte;
+            os.write(writeResponse().getBytes());
+
+            String request = "";
 
             while ((_byte = is.read()) >= 0){
-                System.out.print((char) _byte);
-            }*/
+                request += ((char) _byte);
+            }
 
-            String html = HtmlTop("332 Practical 3") + calculator() + HtmlBot();
+            Scanner parseRequest = new Scanner(request);
 
-            final String CRLF = "\n\r"; //13 10
+            if (!parseRequest.next().equals("GET")){
+                String response =
+                        "HTTP/1.1 501 NOT_IMPLEMENTED" + CRLF + //Status Line   :   HTTP/VERSION RESPONSE_CODE RESPONSE_MESSAGE
+                                "Content-Length: " + (HtmlTop("332 Practical 3") + calculator() + HtmlBot()).getBytes().length + CRLF + //HEADER
+                                CRLF +
+                                (HtmlTop("332 Practical 3") + calculator() + HtmlBot()) +
+                                CRLF + CRLF;
+                os.write(response.getBytes());
+            }
 
-            String response =
-                    "HTTP/1.1 200 OK" + CRLF + //Status Line   :   HTTP/VERSION RESPONSE_CODE RESPONSE_MESSAGE
-                            "Content-Length: " + html.getBytes().length + CRLF + //HEADER
-                            CRLF +
-                            html +
-                            CRLF + CRLF;
+            String requestType = parseRequest.next();
 
-            os.write(response.getBytes());
+            switch (requestType) {
+                case "/favicon.ico":
+                    //TODO: ignore
+                    break;
+                case "/ADD":
+                    nextOp = ADD;
+                    break;
+                case "/SUB":
+                    nextOp = SUB;
+                    break;
+                case "/MUL":
+                    nextOp = MUL;
+                    break;
+                case "/DIV":
+                    nextOp = DIV;
+                    break;
+                case "/RES":
+                    doOperation(nextOp, value1, value2);
+                    System.out.println(value1 + " " + nextOp + " " + value2 + " = " + result);
+                    os.write(writeResponse().getBytes());
+                    nextOp = NUL;
+                    break;
+                default:
+                    if (value1==null) {
+                        value1 = requestType.substring(1);
+                    }
+                    else if (value1 != null && nextOp.equals(NUL)){
+                        value1 = value1 + requestType.substring(1);
+                    }
+                    else if (!nextOp.equals(NUL) && value2==null){
+                        value2 = requestType.substring(1);
+                    }
+                    else if (!nextOp.equals(NUL) && value2!=null){
+                        value2 = value2 + requestType.substring(1);
+                    }
+            }
+
+
+
+
 
 
         }catch (IOException e){
