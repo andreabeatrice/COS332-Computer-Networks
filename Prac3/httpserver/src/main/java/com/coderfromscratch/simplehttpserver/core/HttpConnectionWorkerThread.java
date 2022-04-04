@@ -30,33 +30,36 @@ public class HttpConnectionWorkerThread extends Thread{
 
     public static String calculator()
     {
-        String body = "\t<table> ";
-        body = body + "\t \t<tr colspan=\"3\"> <input type=\"number\" id=\"display\" name=\"display\"  maxlength=\"10\"> </tr>";
+
+        String body = "<form action=\"\" method=\"\" name=\"calcForm\">";
+        body += "\t<table> ";
+        body = body + "\t \t<tr colspan=\"3\"> <input type=\"number\" id=\"display\" name=\"display\" value=\"0\" maxlength=\"10\"> </tr>";
             body = body + "\t \t <tr>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=1\">1</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=2\">2</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=3\">3</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=A\">&#43;</a></td>";
+                body = body + "\t \t\t<td style=\"width:20px\"><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"1\">1</button></td>";
+                body = body + "\t \t\t<td style=\"width:20px\"><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"2\">2</button></td>";
+                body = body + "\t \t\t<td style=\"width:20px\"><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"3\">3</button></td>";
+                body = body + "\t \t\t<td style=\"width:20px\"><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"A\">&#43;</button></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t<tr>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=4\">4</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=5\">5</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=6\">6</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=S\">&#45;</a></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"4\">4</button></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"5\">5</button></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"6\">6</button></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"S\">&#45;</button></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t<tr>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=7\">7</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=8\">8</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=9\">9</a></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"7\">7</button></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"8\">8</button></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"9\">9</button></td>";
                 body = body + "\t \t\t<td><a href=\"./VALUE=M\">&#10005;</a></td>";
             body = body + "\t\t </tr>";
             body = body + "\t\t <tr>";
-                body = body + "\t\t\t <td><a href=\"./VALUE=0\">0</a></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=D\">&#247</a></td>";
+                body = body + "\t\t\t <td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"0\">0</button></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"D\">&#247;</button></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"E\">&#247;</button></td>";
                 body = body + "\t \t\t<td></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t</tr>";
-        body = body + "\t </table>";
+        body = body + "\t </table></form>";
 
 
         return body;
