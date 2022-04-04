@@ -50,12 +50,12 @@ public class HttpConnectionWorkerThread extends Thread{
                 body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"7\">7</button></td>";
                 body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"8\">8</button></td>";
                 body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"9\">9</button></td>";
-                body = body + "\t \t\t<td><a href=\"./VALUE=M\">&#10005;</a></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"M\">&#215;</button></td>";
             body = body + "\t\t </tr>";
             body = body + "\t\t <tr>";
                 body = body + "\t\t\t <td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"0\">0</button></td>";
                 body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"D\">&#247;</button></td>";
-                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"E\">&#247;</button></td>";
+                body = body + "\t \t\t<td><button type=\"submit\" name=\"value\" for=\"calcForm\" value=\"E\">&#61;</button></td>";
                 body = body + "\t \t\t<td></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t</tr>";
