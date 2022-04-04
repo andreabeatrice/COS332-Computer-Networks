@@ -5,6 +5,7 @@ import com.coderfromscratch.simplehttpserver.http.Operation;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -17,6 +18,9 @@ public class HttpConnectionWorkerThread extends Thread{
     private static String value2 = "0";
     private static Operation nextOp = NUL;
     public static String result = "0";
+    public static String prev = "";
+
+    private static boolean display = false;
 
     static final String CRLF = "\n\r"; //13 10
 
@@ -39,13 +43,11 @@ public class HttpConnectionWorkerThread extends Thread{
         return Top;
 
     }
-    
+
 
     public static String calculator() {
-
-        String body = "<form action=\"\" method=\"\" name=\"calcForm\">";
-        body += "\t<table> ";
-        body = body + "\t \t<tr colspan=\"3\"> <input style=\"text-align:right\" type=\"text\" id=\"display\" name=\"display\" value=\"" +  result +"\" maxlength=\"10\"> </tr>";
+        String body = "\t<table> ";
+        //body = body + "\t \t<tr colspan=\"3\"> <input style=\"text-align:right\" type=\"text\" id=\"display\"  value=\"" +  result +"\" maxlength=\"10\"> </tr>";
             body = body + "\t \t <tr>";
                 body = body + "\t \t\t<td style=\"width:20px\"><a href=\"1\">1</a></td>";
                 body = body + "\t \t\t<td style=\"width:20px\"><a href=\"2\">2</a></td>";
@@ -68,10 +70,10 @@ public class HttpConnectionWorkerThread extends Thread{
                 body = body + "\t\t\t <td><a href=\"0\">0</a></td>";
                 body = body + "\t \t\t<td><a href=\"DIV\">&#247;</a></td>";
                 body = body + "\t \t\t<td><a href=\"RES\">&#61;</a></td>";
-                body = body + "\t \t\t<td></td>";
+                body = body + "\t \t\t<td><a href=\"CLR\">CLR</a></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t</tr>";
-        body = body + "\t </table></form>";
+        body = body + "\t </table>";
 
         return body;
 
@@ -80,6 +82,11 @@ public class HttpConnectionWorkerThread extends Thread{
     public static String HtmlBot()
     {
         return "</body>\n</html>\n";
+    }
+
+    public static String calculation()
+    {
+            return "<p>" + value1 + " " + nextOp + " " + value2 + " = " + result + "</p>";
     }
 
     public static void doOperation(Operation o, String v1, String v2){
@@ -105,13 +112,18 @@ public class HttpConnectionWorkerThread extends Thread{
 
     }
 
+
+
     public static String writeResponse(){
-        String html = HtmlTop("332 Practical 3") + calculator() + HtmlBot();
+        String html = HtmlTop("332 Practical 3") + calculator() + calculation() + HtmlBot();
 
         String response =
                 "HTTP/1.1 200 OK" + CRLF + //Status Line   :   HTTP/VERSION RESPONSE_CODE RESPONSE_MESSAGE
-                        "Content-Length: " + html.getBytes().length + CRLF + //HEADER
-                        CRLF +
+                        "Content-Length: " + html.getBytes().length + CRLF;
+
+       //response += "Refresh: " + "2.5" + CRLF;
+
+        response +=     CRLF +
                         html +
                         CRLF + CRLF;
         return response;
@@ -166,10 +178,27 @@ public class HttpConnectionWorkerThread extends Thread{
                     nextOp = DIV;
                     break;
                 case "/RES":
-                    doOperation(nextOp, value1, value2);
-                    System.out.println(value1 + " " + nextOp + " " + value2 + " = " + result);
-                    os.write(writeResponse().getBytes());
+                    if (prev.equals("")){
+                        doOperation(nextOp, value1, value2);
+                        prev = "RES";
+                    }
+                    if (prev.equals("RES")){
+                        prev = "RESRES";
+                    }
+                    else {
+                        nextOp = NUL;
+                        value1 = "0";
+                        value2 = "0";
+                        result = "0";
+                        prev = "";
+                    }
+                    break;
+                case "/CLR":
                     nextOp = NUL;
+                    value1 = "0";
+                    value2 = "0";
+                    result = "0";
+                    prev = "";
                     break;
                 default:
                     if (value1==null) {
@@ -186,13 +215,12 @@ public class HttpConnectionWorkerThread extends Thread{
                     }
             }
 
-
-
+            System.out.println(value1 + " " + nextOp + " " + value2 + " = " + result);
 
 
 
         }catch (IOException e){
-            System.out.println("Problem with communication ");
+            System.out.println("Problem with communication " + e);
         } finally {
             if (is!=null){
                 try{
