@@ -12,6 +12,62 @@ public class HttpConnectionWorkerThread extends Thread{
         this.socket = socket;
     }
 
+    public static String HtmlTop(String Title)
+    {
+        String Top = new String();
+        Top = "<html>\n";
+        Top+= "<head>\n";
+        Top+= "<title>\n";
+        Top+= Title;
+        Top+= "\n";
+        Top+= "</title>\n";
+        Top+= "</head>\n";
+        Top+= "<body>\n";
+
+        return Top;
+
+    }
+
+    public static String calculator()
+    {
+        String body = "\t<table> ";
+        body = body + "\t \t<tr colspan=\"3\"> <input type=\"number\" id=\"display\" name=\"display\"  maxlength=\"10\"> </tr>";
+            body = body + "\t \t <tr>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=1\">1</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=2\">2</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=3\">3</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=A\">&#43;</a></td>";
+            body = body + "\t \t</tr>";
+            body = body + "\t \t<tr>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=4\">4</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=5\">5</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=6\">6</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=S\">&#45;</a></td>";
+            body = body + "\t \t</tr>";
+            body = body + "\t \t<tr>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=7\">7</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=8\">8</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=9\">9</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=M\">&#10005;</a></td>";
+            body = body + "\t\t </tr>";
+            body = body + "\t\t <tr>";
+                body = body + "\t\t\t <td><a href=\"./VALUE=0\">0</a></td>";
+                body = body + "\t \t\t<td><a href=\"./VALUE=D\">&#247</a></td>";
+                body = body + "\t \t\t<td></td>";
+            body = body + "\t \t</tr>";
+            body = body + "\t \t</tr>";
+        body = body + "\t </table>";
+
+
+        return body;
+
+    }
+
+    public static String HtmlBot()
+    {
+        return "</body>\n</html>\n";
+    }
+
     @Override
     public void run() {
         InputStream is = null;
@@ -27,7 +83,7 @@ public class HttpConnectionWorkerThread extends Thread{
                 System.out.print((char) _byte);
             }*/
 
-            String html = "<html><head><title>Simple Java HTTP Server</title></head><body><h1>Page was served using simple Java HTTP server</h1></body></html>";
+            String html = HtmlTop("332 Practical 3") + calculator() + HtmlBot();
 
             final String CRLF = "\n\r"; //13 10
 

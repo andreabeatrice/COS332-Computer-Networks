@@ -1,4 +1,5 @@
 package com.coderfromscratch.simplehttpserver.http;
 
-public class HttpResponse {
+public enum HttpMethod {
+    GET, HEAD;
 }
