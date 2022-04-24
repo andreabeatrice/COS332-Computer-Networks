@@ -46,9 +46,9 @@ public class HttpConnectionWorkerThread extends Thread{
 
 
     public static String calculator() {
-        String body = "\t<table> ";
-        //body = body + "\t \t<tr colspan=\"3\"> <input style=\"text-align:right\" type=\"text\" id=\"display\"  value=\"" +  result +"\" maxlength=\"10\"> </tr>";
-            body = body + "\t \t <tr>";
+        String body = "";
+        //body = body + "	<table>  \t \t<tr colspan=\"3\"> <input style=\"text-align:right\" type=\"text\" id=\"display\"  value=\"" +  result +"\" maxlength=\"10\"> </tr>";
+        /* body = body + "\t \t <tr>";
                 body = body + "\t \t\t<td style=\"width:20px\"><a href=\"1\">1</a></td>";
                 body = body + "\t \t\t<td style=\"width:20px\"><a href=\"2\">2</a></td>";
                 body = body + "\t \t\t<td style=\"width:20px\"><a href=\"3\">3</a></td>";
@@ -73,8 +73,20 @@ public class HttpConnectionWorkerThread extends Thread{
                 body = body + "\t \t\t<td><a href=\"CLR\">CLR</a></td>";
             body = body + "\t \t</tr>";
             body = body + "\t \t</tr>";
-        body = body + "\t </table>";
+        body = body + "\t </table>";*/
 
+        body += "<form action=\"\" method=\"GET\">";
+        body += "\t <ul>";
+        body += "\t \t <li>";
+        body += "\t \t \t<label for=\"name\">Name:</label>";
+        body += "\t \t \t <input type=\"text\" id=\"name\" name=\"name\">";
+        body += "\t \t </li>";
+        body += "\t \t <li>";
+        body += "\t \t \t<label for=\"number\">Cellphone Number:</label>";
+        body += "\t \t \t <input type=\"text\" id=\"number\" name=\"number\">";
+        body += "\t \t </li>";
+        body += "\t </ul>";
+        body += "</form>";
         return body;
 
     }
@@ -152,7 +164,7 @@ public class HttpConnectionWorkerThread extends Thread{
             if (!parseRequest.next().equals("GET")){
                 String response =
                         "HTTP/1.1 501 NOT_IMPLEMENTED" + CRLF + //Status Line   :   HTTP/VERSION RESPONSE_CODE RESPONSE_MESSAGE
-                                "Content-Length: " + (HtmlTop("332 Practical 3") + calculator() + HtmlBot()).getBytes().length + CRLF + //HEADER
+                                "Content-Length: " + (HtmlTop("332 Practical 4") + calculator() + HtmlBot()).getBytes().length + CRLF + //HEADER
                                 CRLF +
                                 (HtmlTop("332 Practical 3") + calculator() + HtmlBot()) +
                                 CRLF + CRLF;
@@ -215,7 +227,7 @@ public class HttpConnectionWorkerThread extends Thread{
                     }
             }
 
-            System.out.println(value1 + " " + nextOp + " " + value2 + " = " + result);
+           // System.out.println(value1 + " " + nextOp + " " + value2 + " = " + result);
 
 
 
