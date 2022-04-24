@@ -1,0 +1,118 @@
+<html><head>
+<title>
+332 Practical 4
+</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="container mt-5"><div class="col col-lg-auto">	<div class="col col-lg-auto">
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Cellphone Number</th>
+				<th scope="col" colspan="2" class="text-center">Actions</th>
+			</tr>
+		</thead>
+		<tbody>			<tr>
+				<th scope="row">1</th>
+				<td>Mirabel Madrigal</td>
+				<td>025 136 4587</td>
+				<td><form method="get" action=""><input type="hidden" value="Mirabel Madrigal" name="deleteName"><button type="submit" class="btn btn btn-dark float-right mr-2" name="delete" value="true">Delete</button></form><form method="get" action=""><input type="hidden" value="Mirabel Madrigal" name="deleteName"><button type="submit" class="btn btn btn-dark float-right mr-2" name="update" value="true">Update</button></form></td>
+			</tr>
+			<tr>
+				<th scope="row">2</th>
+				<td>Beatrice Smith</td>
+				<td>060 986 8619</td>
+				<td><form method="get" action=""><input type="hidden" value="Beatrice Smith" name="deleteName"><button type="submit" class="btn btn btn-dark float-right mr-2" name="delete" value="true">Delete</button></form><form method="get" action=""><input type="hidden" value="Beatrice Smith" name="deleteName"><button type="submit" class="btn btn btn-dark float-right mr-2" name="update" value="true">Update</button></form></td>
+			</tr>
+			<tr>
+				<th scope="row">3</th>
+				<td>Amanda H</td>
+				<td>082 649 7852</td>
+				<td><form method="get" action=""><input type="hidden" value="Amanda H" name="deleteName"><button type="submit" class="btn btn btn-dark float-right mr-2" name="delete" value="true">Delete</button></form><form method="get" action=""><input type="hidden" value="Amanda H" name="deleteName"><button type="submit" class="btn btn btn-dark float-right mr-2" name="update" value="true">Update</button></form></td>
+			</tr>
+			<tr>
+				<th scope="row">4</th>
+				<td>Bruno Madrigal</td>
+				<td>087 139 6754</td>
+				<td><form method="get" action=""><input type="hidden" value="Bruno Madrigal" name="deleteName"><button type="submit" class="btn btn btn-dark float-right mr-2" name="delete" value="true">Delete</button></form><form method="get" action=""><input type="hidden" value="Bruno Madrigal" name="deleteName"><button type="submit" class="btn btn btn-dark float-right mr-2" name="update" value="true">Update</button></form></td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+
+	<br>	<div class="card-deck">
+		<div class="card border-dark mb-3">
+  		
+		  		<div class="card-body text-dark">
+		  			<h5 class="card-title">Add Entry</h5>
+					<form method="get" action="">
+						<div class="row g-3 mb-2 align-items-center">
+						  <div class="col-4">
+						    <label for="new_name" class="col-form-label">Name: </label>
+						  </div>
+						  <div class="col-8">
+						    <input type="text" id="new_name" class="form-control" name="name" required="">
+						  </div>
+						</div>
+
+						<div class="row g-3 align-items-center">
+						  <div class="col-4">
+						    <label for="cellnum" class="col-form-label">Cellphone Number: </label>
+						  </div>
+
+						  <div class="col-8">
+						    <input type="tel" id="cellnum" class="form-control" maxlength="10" minlength="10" name="cellnum" required="">
+						  </div>
+						</div>
+
+						<button type="submit" class="btn btn btn-dark float-right mt-1" name="add" value="true">Submit</button>
+					</form>
+				</div>
+			</div>
+
+	</div>	
+
+	<div class="card-deck">
+		<div class="card border-dark mb-3">
+  		
+		 <div class="card-body text-dark">
+		  	<h5 class="card-title">Search</h5>
+				<form method="get" action="">
+					<div class="row g-3 mb-2 align-items-center">
+						<div class="input-group mb-3 ml-4 mr-4">
+  							<input type="text" class="form-control" placeholder="Recipient's username" name="searchterm" aria-label="Recipient's username" aria-describedby="button-addon2" required>
+  							<div class="input-group-append">
+    							<button type="submit" class="btn btn btn-dark" id="button-addon2"><i class="fas fa-search"></i>Search</button>
+  							</div>
+						</div>
+					</div>
+
+					</form>
+				</div>
+			</div>
+	</div>
+
+	<script type="text/javascript">
+		(function()
+		{
+		  if( window.localStorage )
+		  {
+		    if( !localStorage.getItem('firstLoad') )
+		    {
+		      localStorage['firstLoad'] = true;
+		      location.replace("");
+		    }  
+		    else
+		      localStorage.removeItem('firstLoad');
+		  }
+		})();
+
+	</script>
+
+</body>
+</html>
