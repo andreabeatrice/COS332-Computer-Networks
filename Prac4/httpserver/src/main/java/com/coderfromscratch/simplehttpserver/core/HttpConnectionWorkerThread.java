@@ -4,6 +4,7 @@ import com.coderfromscratch.simplehttpserver.http.Operation;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Locale;
 import java.util.Scanner;
 
 import static com.coderfromscratch.simplehttpserver.http.Operation.*;
@@ -12,7 +13,7 @@ public class HttpConnectionWorkerThread extends Thread{
     private Socket socket;
 
     private static String tblContents = "";
-
+    private static String searchTBL = "";
 
     private static boolean display = false;
 
@@ -22,19 +23,17 @@ public class HttpConnectionWorkerThread extends Thread{
         this.socket = socket;
     }
 
-    public static String HtmlTop(String Title)
-    {
+    public static String HtmlTop(String Title) {
         String Top = new String();
-        Top = "<html>\n";
-        Top+= "<head>\n";
-        Top+= "<title>\n";
-        Top+= Title;
-        Top+= "\n";
-        Top+= "</title>\n";
-        Top+= "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\">\n" +
-                "<link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css\" rel=\"stylesheet\">\n\n";
-        Top+= "</head>\n";
-        Top+= "<body>\n";
+        Top = "<html>\n" +
+                "\t<head>\n" +
+                "\t\t<title> 332 Practical 4</title>\n" +
+                "\t\t<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\">\n" +
+                "\t\t<link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css\" rel=\"stylesheet\">\n" +
+                "\t\t<script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>\n" +
+                "\t</head>\n" +
+                "\t<body>\n";
+
 
         return Top;
 
@@ -82,18 +81,17 @@ public class HttpConnectionWorkerThread extends Thread{
             tbl += "\t\t\t\t<td>" + n + "</td>\n";
             tbl += "\t\t\t\t<td>" + n2 + "</td>\n";
 
-            tbl += "\t\t\t\t<td>" +
-                    "<form method=\"get\" action=\"\">" +
-                    "<input type=\"hidden\" value=\""+n+"\" name=\"deleteName\">" +
-                    "<button type=\"submit\" class=\"btn btn btn-dark float-right mr-2\" name=\"delete\" value=\"true\">Delete <small><i class=\"fas fa-trash ml-2\"></i></small> </button>" +
-                    "</form>";
+            tbl += "\t\t\t\t<td>\n" +
+                    "\t\t\t\t\t<form method=\"get\" action=\"\">\n" +
+                    "\t\t\t\t\t\t<input type=\"hidden\" value=\""+n+"\" name=\"deleteName\">\n" +
+                    "\t\t\t\t\t\t<button type=\"submit\" class=\"btn btn btn-dark float-right mr-2\" name=\"delete\" value=\"true\">Delete <small><i class=\"fas fa-trash ml-2\"></i></small> </button>\n" +
+                    "\t\t\t\t\t</form>\n";
             tbl +=
-                    "<form method=\"get\" action=\"\">" +
-                    "<input type=\"hidden\" value=\""+n+"\" name=\"deleteName\">" +
-                    "<button type=\"submit\" class=\"btn btn btn-dark float-right mr-2\" name=\"update\" value=\"true\">Update <small><i class=\"fas fa-pen ml-2\"></i></small> </button>" +
-                    "</form>" +
-                    "</td>\n";
+                    "\t\t\t\t\t<input type=\"hidden\" value=\""+n+"\" name=\"edit\">" +
+                    "\t\t\t\t\t<button type=\"submit\" class=\"btn btn btn-dark float-right mr-2\" name=\"update\" value=\"true\"><span>Edit</span><small><i class=\"fas fa-pen ml-2\"></i></small> </button>" +
+                    "\t\t\t\t</td>\n";
             tbl += "\t\t\t</tr>\n";
+
             tblContents += s + "\n";
             i++;
         }
@@ -107,8 +105,7 @@ public class HttpConnectionWorkerThread extends Thread{
         return tbl;
     }
 
-    public static String formBody()
-    {
+    public static String formBody() throws FileNotFoundException {
         String form = "";
 
         form += "\t<div class=\"card-deck\">\n" +
@@ -141,6 +138,36 @@ public class HttpConnectionWorkerThread extends Thread{
                 "\t\t\t\t</div>\n" +
                 "\t\t\t</div>\n" +
                 "\n" +
+                "\t\t<div class=\"card border-dark mb-3\" >\n" +
+                "  \t\t\n" +
+                "\t\t  \t\t<div class=\"card-body text-dark\">\n" +
+                "\t\t  \t\t\t<h5 class=\"card-title\">Edit Entry</h5>\n" +
+                "\t\t\t\t\t<form method=\"get\" action=\"\">\n" +
+                "\t\t\t\t\t\t<div class=\"row g-3 mb-2 align-items-center\">\n" +
+                "\t\t\t\t\t\t  <div class=\"col-4\">\n" +
+                "\t\t\t\t\t\t    <label for=\"nameredo\" class=\"col-form-label\">Name: </label>\n" +
+                "\t\t\t\t\t\t  </div>\n" +
+                "\t\t\t\t\t\t  <div class=\"col-8\">\n" +
+                "\t\t\t\t\t\t    <input type=\"text\" id=\"nameredo\" class=\"form-control\" name=\"nameredo\" required>\n" +
+                "\t\t\t\t\t\t  </div>\n" +
+                "\t\t\t\t\t\t</div>\n" +
+                "\n" +
+                "\t\t\t\t\t\t<div class=\"row g-3 align-items-center\">\n" +
+                "\t\t\t\t\t\t  <div class=\"col-4\">\n" +
+                "\t\t\t\t\t\t    <label for=\"cellnumredo\" class=\"col-form-label\">Cellphone Number: </label>\n" +
+                "\t\t\t\t\t\t  </div>\n" +
+                "\n" +
+                "\t\t\t\t\t\t  <div class=\"col-8\">\n" +
+                "\t\t\t\t\t\t    <input type=\"tel\" id=\"cellnumredo\" class=\"form-control\" maxlength=\"10\" minlength=\"10\" name=\"cellnumredo\" required>\n" +
+                "\t\t\t\t\t\t  </div>\n" +
+                "\t\t\t\t\t\t</div>\n" +
+                "\n" +
+                "\t\t\t\t\t\t<button type=\"submit\" class=\"btn btn btn-dark float-right mt-1\" name=\"update\" value=\"true\">Update Person <small><i class=\"fas fa-user-edit ml-2\"></i></small> </button>\n" +
+                "\t\t\t\t\t\t<input type=\"hidden\" name=\"usernum\" value=\"\" id=\"usernum\">\n" +
+                "\t\t\t\t\t</form>\n" +
+                "\t\t\t\t</div>\n" +
+                "\t\t\t</div>\n" +
+                "\n" +
                 "\t</div>";
 
         form += "\t<div class=\"card-deck\">\n" +
@@ -151,20 +178,68 @@ public class HttpConnectionWorkerThread extends Thread{
                 "\t\t\t\t<form method=\"get\" action=\"\">\n" +
                 "\t\t\t\t\t<div class=\"row g-3 mb-2 align-items-center\">\n" +
                 "\t\t\t\t\t\t<div class=\"input-group mb-3 ml-4 mr-4\">\n" +
-                "  \t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Recipient's username\" name=\"searchterm\" aria-label=\"Recipient's username\" aria-describedby=\"button-addon2\" required>\n" +
+                "  \t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Recipient's username\" name=\"searchterm\" aria-label=\"Search Term\" aria-describedby=\"button-addon2\" required>\n" +
                 "  \t\t\t\t\t\t\t<div class=\"input-group-append\">\n" +
                 "    \t\t\t\t\t\t\t<button type=\"submit\" class=\"btn btn btn-dark\" id=\"button-addon2\" name=\"search\" value=\"true\">Search <small><i class=\"fas fa-search ml-2\"></i></small> </button>\n" +
                 "  \t\t\t\t\t\t\t</div>\n" +
                 "\t\t\t\t\t\t</div>\n" +
                 "\t\t\t\t\t</div>\n" +
                 "\n" +
-                "\t\t\t\t\t</form>\n" +
-                "\t\t\t\t</div>\n" +
+                "\t\t\t\t\t</form>\n";
+
+        if (searchTBL.equals("")){
+
+        }
+        else {
+            form += "\t\t  \t<h5 class=\"card-title\">Search Results</h5>\n" ;
+            form += searchTable();
+        }
+
+        form += "\t\t\t\t</div>\n" +
                 "\t\t\t</div>\n" +
                 "\t</div>";
 
 
         return form;
+    }
+
+    public static String searchTable() throws FileNotFoundException {
+        String tbl = "";
+        Scanner dbScanner = new Scanner(searchTBL).useDelimiter("\n");
+
+        tbl += "\t<div class=\"col col-lg-auto\">\n" +
+                "\t<table class=\"table table-striped table-hover\">\n" +
+                "\t\t<thead>\n" +
+                "\t\t\t<tr>\n" +
+                "\t\t\t\t<th scope=\"col\">Name</th>\n" +
+                "\t\t\t\t<th scope=\"col\">Cellphone Number</th>\n" +
+                "\t\t\t</tr>\n" +
+                "\t\t</thead>\n" +
+                "\t\t<tbody>";
+
+        while (dbScanner.hasNext()){
+            String str = dbScanner.next();
+
+            tbl += "\t\t\t<tr>\n";
+            Scanner lineScanner = new Scanner(str).useDelimiter(",");
+            String n = lineScanner.next();
+            String n2 = lineScanner.next();
+
+            tbl += "\t\t\t\t<td>" + n + "</td>\n";
+            tbl += "\t\t\t\t<td>" + n2 + "</td>\n";
+
+            tbl += "\t\t\t</tr>\n";
+        }
+
+        tbl += "\t\t</tbody>\n" +
+                "\t</table>\n" +
+                "\t</div>\n" +
+                "\n" +
+                "\t<br/>";
+
+        searchTBL = "";
+
+        return tbl;
     }
 
     public static void insertToDB(String name,String num) throws IOException {
@@ -194,54 +269,91 @@ public class HttpConnectionWorkerThread extends Thread{
         }
     }
 
-    public static void searchDB(String searchterm){
-        if (!tblContents.contains(searchterm)) {
+    public static void searchDB(String searchterm) throws FileNotFoundException {
+        //searchTBL
+        FileReader input = new FileReader("src/main/resources/friendsdb.txt");
+        Scanner dbScanner =new Scanner(input).useDelimiter("\n");
+        while (dbScanner.hasNext()) {
+            String db = dbScanner.next();
+            if (db.toLowerCase().contains(searchterm.toLowerCase())){
+                searchTBL += db + "\n";
+                System.out.println(db);
+            }
+        }
 
-        }
-        else {
-            
-        }
     }
 
+    public static void updateRecord(int line, String name,String num) throws IOException {
+        System.out.println(line + " " + name + " " + num);
+        //if (tblContents.contains(name)){
+            BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/friendsdb.txt"));
 
-    public static String HtmlBot()
-    {
+            Scanner dbScanner =new Scanner(tblContents).useDelimiter("\n");
+            int i = 1;
+
+            while (dbScanner.hasNext()){
+                String l = dbScanner.next();
+                if (i == line){
+                    bw.write(name + "," + num + "\n");
+                }
+                else {
+                    bw.write(l + "\n");
+                }
+                i++;
+            }
+            bw.close();
+        //}
+
+    }
+
+    public static String HtmlBot() {
         String bt = "";
 
-        bt += "<script type='text/javascript'>\n" +
+        bt += "\t<script type=\"text/javascript\">\n" +
+                "\t\t(function()\n" +
+                "\t\t{\n" +
+                "\t\t  if( window.localStorage )\n" +
+                "\t\t  {\n" +
+                "\t\t    if( !localStorage.getItem('firstLoad') )\n" +
+                "\t\t    {\n" +
+                "\t\t      localStorage['firstLoad'] = true;\n" +
+                "\t\t      location.replace(\"\");\n" +
+                "\t\t    }  \n" +
+                "\t\t    else\n" +
+                "\t\t      localStorage.removeItem('firstLoad');\n" +
+                "\t\t  }\n" +
+                "\t\t})();\n" +
                 "\n" +
+                "\t\t$('button:contains(Edit)').on('click', function(){\n" +
+                "\t\t\t//$(this).children().closest('span').text(\"Done\");\n" +
+                "\t\t\t$('button:contains(Edit)').attr('disabled', 'disabled');\n" +
+                "\t\t\tconsole.log($(this).parent().siblings('td')[0].innerHTML);\n" +
                 "\n" +
-                "(function()\n" +
-                "{\n" +
-                "  if( window.localStorage )\n" +
-                "  {\n" +
-                "    if( !localStorage.getItem('firstLoad') )\n" +
-                "    {\n" +
-                "      localStorage['firstLoad'] = true;\n" +
-                "      location.replace(\"\");\n" +
-                "    }  \n" +
-                "    else\n" +
-                "      localStorage.removeItem('firstLoad');\n" +
-                "  }\n" +
-                "})();\n" +
-                "\n" +
-                "</script>";
+                "\t\t\t$('#nameredo').attr(\"value\", $(this).parent().siblings('td')[0].innerHTML);\n" +
+                "\t\t\t$('#cellnumredo').attr(\"value\", $(this).parent().siblings('td')[1].innerHTML);\n" +
+                "\t\t\t$('#usernum').attr(\"value\", $(this).parent().siblings('th').text());" +
+                "\t\t});\n" +
+                "\t</script>";
 
-        bt += "</body>\n</html>\n";
+        bt += "\t</body>\n</html>\n";
         return bt;
     }
 
-
-
     public static String writeResponse() throws FileNotFoundException {
-        String html = HtmlTop("332 Practical 4") + body() + HtmlBot();
 
-        String response =
+        String html = "";
+        String response ="";
+
+        html = HtmlTop("332 Practical 4") + body() + HtmlBot();
+
+        response =
                 "HTTP/1.1 200 OK" + CRLF + //Status Line   :   HTTP/VERSION RESPONSE_CODE RESPONSE_MESSAGE
                         "Content-Length: " + html.getBytes().length + CRLF;
         response +=     CRLF +
-                        html +
-                        CRLF + CRLF;
+                html +
+                CRLF + CRLF;
+
+
         return response;
     }
 
@@ -293,7 +405,18 @@ public class HttpConnectionWorkerThread extends Thread{
                         insertToDB(name, num);
                 }
                 else if (requestType.contains("update=true")){
-                    System.out.println("\nupdate=true");
+                    System.out.println(requestType);
+                    String name = scanReq.next();
+                    name = name.substring(11, name.length());
+                    name = name.replaceAll("[\\+]", " ");
+                    String num = scanReq.next();
+                    num = num.substring(12, num.length());
+                    num = num.replaceAll("[\\+]", " ");
+                    String update = scanReq.next();
+                    String usernum = scanReq.next();
+                    usernum = usernum.substring(8);
+
+                    updateRecord(Integer.parseInt(usernum), name, num);
                 }
                 else if (requestType.contains("delete=true")){
                     String name = scanReq.next();
@@ -303,7 +426,7 @@ public class HttpConnectionWorkerThread extends Thread{
                 }
                 else if (requestType.contains("search=true")){
                     String searchTerm = scanReq.next();
-                    System.out.println(searchTerm);
+                    searchTerm = searchTerm.substring(13, searchTerm.length());
                     searchDB(searchTerm);
                 }
 
