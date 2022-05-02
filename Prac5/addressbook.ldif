@@ -13,25 +13,27 @@ objectclass: top
 objectclass: organizationalUnit
 ou: Friends
 
-dn: cn=Catherine Blignaut,ou=Family,o=Address Book
+dn: cn=Catherine Blignaut,ou=Family,ou=People,o=Address Book
 objectclass: top
 objectclass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
 cn: Catherine Blignaut
 ou: Family
+ou: People
 telephonenumber: (083) 255-3770
 
-dn: cn=Ayla Inggs,ou=Friends,o=Address Book
+dn: cn=Ayla Inggs,ou=Friends,ou=People,o=Address Book
 objectclass: top
 objectclass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
 cn: Ayla Inggs
 ou: Friends
+ou: People
 telephonenumber: (083) 254-6432
 
-dn: cn=Peter Blignaut,ou=Family,o=Address Book
+dn: cn=Peter Blignaut,ou=Family,ou=People,o=Address Book
 objectclass: top
 objectclass: person
 objectClass: organizationalPerson
@@ -39,9 +41,10 @@ objectClass: inetOrgPerson
 cn: Peter Blignaut
 sn: Blignaut
 ou: Family
-telephonenumber: telephonenumber:(082) 411-4548
+ou: People
+telephonenumber:(082) 411-4548
 
-dn: cn=Ryan Healy,ou=Friends,o=Address Book
+dn: cn=Ryan Healy,ou=Friends,ou=People,o=Address Book
 objectclass: top
 objectclass: person
 objectClass: organizationalPerson
@@ -49,5 +52,5 @@ objectClass: inetOrgPerson
 cn: Ryan Healy
 sn: Healy
 ou: Friends
+ou: People
 telephonenumber: (071) 420-9111
-

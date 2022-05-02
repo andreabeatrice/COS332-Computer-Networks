@@ -4,7 +4,7 @@ import java.net.*;
 
 public class Server{
 
-
+	private static int PORT = 389;
 	private Socket			socket = null;
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
@@ -43,10 +43,9 @@ public class Server{
 
 					output.println(ldapadd(args, fName));
 				}
-				else if (inputLine.contains("ldapcompare")){  //The ldapcompare command-line tool enables you to match attribute values you 
+				else if (inputLine.contains("ldapsearch")){  //The ldapcompare command-line tool enables you to match attribute values you 
 															//specify in the command line with the attribute values in the directory entry.
-					output.println(inputLine + "~from Server.java");
-                	System.out.println(inputLine);
+					output.println(ldapsearch(inputLine));
 				}
 
             }
@@ -94,7 +93,7 @@ public class Server{
       		myWriter.write("telephonenumber: " + telephonenumber + "\n\n");
       		myWriter.close();
 
-      		System.out.println("dn: " + cn + ou + o + "\n");
+      		System.out.println("New Entry:\n dn: " + cn + "," + ou + "," + o + "\n");
 
       	} catch (IOException e) {
 	    	returnString = "An error occurred.";
@@ -103,215 +102,54 @@ public class Server{
 		return "added to database\n";
 	}
 
-	public String ldapcompare(){
+	public String ldapsearch(String args){
+		//	ldapsearch -b "" -s base -v "objectclass=*"
+		//	-b specifies base DN for the search, root in this case.
+		//	-s specifies whether the search is a base search (base), one level search (one) or subtree search (sub).
+		//	"objectclass=*" specifies the filter for search
 
-	}
-
-
-	public void insert(String en){
-		String result = "";
-
-		try {
-      		FileWriter myWriter = new FileWriter("database.txt", true);
-
-      		String entry = en.substring(8, en.length()-1) + "\n";
-
-     		myWriter.write(entry);
-      		myWriter.close();
-      		//result = ;
-      		
-      		output.write(13);
-			output.write(10);
-			output.println("Successfully wrote to the file.");
-
-	    } catch (IOException e) {
-	      //result = "An error occurred.";
-	    }
-
-		output.write(13);
-		output.write(10);
-		output.write(27);
-		output.println("[0G ");
-	}
-
-	public void display(){
-		output.println("FRIEND, TELEPHONE NUMBER");
-
-
-		try {
-      		Scanner input = new Scanner(new File("database.txt"));
-      		input.useDelimiter("\n");
-      		while (input.hasNext()){
-				output.write(13);
-				output.write(10);
-				output.println(input.next());
-      			//result += nl + input.next();
-      		}
-
-      		input.close();
-
-	    } catch (IOException e) {
-	      //result = "An error occurred.";
-	    }
-
-		//return result;
-		output.write(13);
-		output.write(10);
-		output.write(27);
-		output.println("[0G ");
-	}
-
-
-	public void search(String en){
-		output.println("SEARCH RESULTS: ");
-
-		String searchterm = en.substring(8, en.length()-1);
-
-
-		try {
-      		Scanner input = new Scanner(new File("database.txt"));
-      		input.useDelimiter("\n");
-      		while (input.hasNextLine()){
-      			String line = input.nextLine();
-      			if (line.contains(searchterm)){
-      				output.write(13);
-					output.write(10);
-					output.println(line);
-      			}
-      			
-      		}
-
-      		input.close();
-
-	    } catch (IOException e) {
-	      //result = "An error occurred.";
-	    }
-
-
-	    output.write(13);
-		output.write(10);
-		output.write(27);
-		output.println("[0G ");
-	}
-
-	public void delete(String en){
-
-		String searchterm = en.substring(8, en.length()-1);
-		String result = "";
-		boolean del = false;
-		try {
-      		Scanner input = new Scanner(new File("database.txt"));
-      		input.useDelimiter("\n");
-      		while (input.hasNextLine()){
-      			String line = input.nextLine();
-      			if (!line.contains(searchterm)){
-      				result += line +"\n";
-      			}
-      			else {
-      				del = true;
-      			}
-      			
-      		}
-
-      		input.close();
-
-      		FileWriter myWriter = new FileWriter("database.txt");
-
-     		myWriter.write(result);
-      		myWriter.close();
-
-      		if (del) {
-      			output.write(13);
-				output.write(10);
-      			output.println("Record Successfully Deleted");
-      		}
-      		else {
-      			output.write(13);
-				output.write(10);
-      			output.println("Nothing to delete.");
-      		}
-
-      		
-      		output.write(13);
-			output.write(10);
-			output.write(27);
-			output.println("[0G ");
-
-	    } catch (IOException e) {
-
-	      //return "An error occurred.";
-	    }
-
-	}
-	
-	public String clearConsole() {   
-		return "\033[H\033[2J";
-	}
-
-
-	public void update(String en){
-
-		String searchterm = en.substring(11, en.length()-1);
-		String updatetype = en.substring(8,9);
-		boolean change = false;
-
-
-		Scanner enTerm = new Scanner(en).useDelimiter(",");
-		String entry = enTerm.next(); //<original name>
-		String newVal = enTerm.next();
-
-		newVal = newVal.substring(1, newVal.length()-1);
-		entry = entry.substring(11, entry.length());
-
-		String result = "";
+		Scanner scanArgs = new Scanner(args).useDelimiter("-");
+		scanArgs.next();
 		
+		String b = scanArgs.next();
+		b = b.substring(3, b.length()-2);
+		String s = scanArgs.next();
+		s = s.substring(2, s.length()-1);
+		String v = scanArgs.next();
+		v = v.substring(6, v.length()-2);
+
+		System.out.println("searched for: " + v);
+
 		try {
-      		Scanner input = new Scanner(new File("database.txt"));
-      		input.useDelimiter("\n");
-      		while (input.hasNextLine()){
-      			String line = input.nextLine();
-      			if (!line.contains(entry)){
-      				result += line +"\n";
-      			}
-      			else {
-      				change = true;
-      				Scanner lin = new Scanner(line).useDelimiter(",");
-      				if (updatetype.equals("n")) {
-      					lin.next();
-      					result += newVal + "," + lin.next()+"\n";
-      				}
-      				else {
-      					result += lin.next() + "," + newVal+"\n";
-      				}
-      			}
-      			
-      		}
+			File myObj = new File("addressbook.ldif");
+		     
+		    Scanner myReader = new Scanner(myObj).useDelimiter("dn:");
+		      
+		    while (myReader.hasNext()) {
+				String data = "dn:" + myReader.next();
+				
+				String[] parts = data.split("\n");
 
-      		input.close();
+				if (parts[0].contains(b) && parts[0].contains(v)) {
+					System.out.println("found: " + parts[9]);
+					return parts[9];
+				}
 
-      		FileWriter myWriter = new FileWriter("database.txt");
+				
+			}
 
-     		myWriter.write(result);
-      		myWriter.close();
-
-      		if (change) {
-      			output.write(13);
-				output.write(10);
-      			output.println("Record Successfully Changed");
-      		}
-      		else {
-      			output.write(13);
-				output.write(10);
-      			output.println("Nothing to change.");
-      		}
-
-	    } catch (IOException e) {
-	      //return "An error occurred.";
+		} catch (IOException e) {
+	    	return "An error occurred.";
 	    }
 
+		return "not found";
+
 	}
+
+
+	
 
 	public static void main(String [] args){
-		Server server = new Server(389);
+		Server server = new Server(PORT);
 	}
 }

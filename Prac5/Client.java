@@ -34,7 +34,7 @@ public class Client{
 
 			while ((userInput = stdIn.readLine()) != "quit") {
 				outprint.println(userInput);
-				System.out.println(in.readLine());
+				System.out.println(in.readLine() + "\n");
 			}
 	
 		}
