@@ -7,6 +7,9 @@ public class Client{
 	private Socket			socket = null;
 	private DataInputStream	input = null;
 	private DataOutputStream 	out = null;
+	private PrintWriter outprint;
+	BufferedReader in;
+    BufferedReader stdIn;
 
 
 	//constructor with port #
@@ -15,19 +18,26 @@ public class Client{
 
 			socket = new Socket(address, port);
 			System.out.println("Connected");
-			System.out.println("******Server Commands***** \n\nDISPLAY - Print database");
-			
-			System.out.println("SEARCH (<friend name>) - Searches the database for a record with the given parameter");
-			System.out.println("INSERT (<friend name>, <friend cell number>) - Adds a record to the database");
-			System.out.println("DELETE (<friend name> || <friend cell number>) - Deletes a record from the database using the provided parameter to find the record");
-			System.out.println("QUIT - Ends interaction with the database.\n");
-			System.out.println("UPDATE - Changes a record in the database.\n");
-			System.out.println("\tUPDATE -n (<original name>, <new name>)\n");
-			System.out.println("\tUPDATE -t (<original name>, <new number>)\n");
 
 			input = new DataInputStream(System.in);
 
 			out = new DataOutputStream(socket.getOutputStream());
+			outprint =  new PrintWriter(socket.getOutputStream(), true);
+
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+			stdIn = new BufferedReader(new InputStreamReader(System.in));
+
+			
+			String userInput;
+			String line = "";
+
+
+			while ((userInput = stdIn.readLine()) != null) {
+				outprint.println(userInput);
+				System.out.println("echo: " + in.readLine());
+			}
+	
 		}
 		catch (UnknownHostException u ){
 			System.out.println(u);
@@ -35,23 +45,11 @@ public class Client{
 		catch (IOException i){
 			System.out.println(i);
 		}
-
-		String line = "";
-
-		while (!line.equals("QUIT")) {
-
-				try {
-					line = input.readLine();
-					out.writeUTF(line);
-
-				}
-				catch (IOException i){
-					System.out.println(i);
-				}
-			}
+		
+		
 	}
 
 	public static void main(String [] args){
-		Client client = new Client("10.0.0.2", 5000);
+		Client client = new Client("127.0.0.1", 389);
 	}
 }

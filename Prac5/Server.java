@@ -9,7 +9,7 @@ public class Server{
 	private ServerSocket	server = null;
 	private DataInputStream 	in = null;
 	private PrintWriter output = null;
-
+            BufferedReader input = null;
 
 	//constructor with port #
 	public Server (int port){
@@ -27,9 +27,9 @@ public class Server{
 
 			output = new PrintWriter(socket.getOutputStream(), true);
 			
-	BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			output.println("Connected" );
+		/*	output.println("Connected" );
 			output.write(13);
 			output.write(10);
 			output.println("******Server Commands*****");
@@ -66,54 +66,24 @@ public class Server{
 			
 			output.write(27);
 			output.println("[0G ");
+		*/
+
+			String inputLine;
+
+			while (!(inputLine = reader.readLine()).equals("QUIT")) {
+                output.println(inputLine + "/test");
+                System.out.println(inputLine);
+
+
+            }
+
 			
-			String line = "";
 
-			while (!line.equals("QUIT")) {
-				try {
-					line = reader.readLine();
-					System.out.println(line);
-
-					if (line.contains("INSERT")) {
-						output.write(13);
-						output.write(10);
-						insert(line);
-					}
-					if (line.contains("DISPLAY")) {
-					//System.out.println(display());
-						output.write(13);
-						output.write(10);
-						display();
-					}
-					if (line.contains("SEARCH")) {
-						output.write(13);
-						output.write(10);
-						search(line);
-					}
-					if (line.contains("DELETE")) {
-						output.write(13);
-						output.write(10);
-						delete(line);
-					}
-					if (line.contains("UPDATE")) {
-						output.write(13);
-						output.write(10);
-						update(line);
-					}
-					if (line.contains("CLEAR")){
-						output.println(clearConsole());
-						output.flush();
-					}
-				}
-				catch (IOException i){
-					output.println(i);
-				}
-			}
 
 			System.out.println("Close connection");
 
 			socket.close();
-			in.close();
+			reader.close();
 
 		}
 		catch (IOException i){
@@ -326,6 +296,6 @@ public class Server{
 	}
 
 	public static void main(String [] args){
-		Server server = new Server(5000);
+		Server server = new Server(389);
 	}
 }
