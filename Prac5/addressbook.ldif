@@ -30,3 +30,24 @@ objectClass: inetOrgPerson
 cn: Ayla Inggs
 ou: Friends
 telephonenumber: (083) 254-6432
+
+dn: cn=Peter Blignaut,ou=Family,o=Address Book
+objectclass: top
+objectclass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Peter Blignaut
+sn: Blignaut
+ou: Family
+telephonenumber: telephonenumber:(082) 411-4548
+
+dn: cn=Ryan Healy,ou=Friends,o=Address Book
+objectclass: top
+objectclass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Ryan Healy
+sn: Healy
+ou: Friends
+telephonenumber: (071) 420-9111
+

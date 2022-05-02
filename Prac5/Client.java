@@ -32,10 +32,9 @@ public class Client{
 			String userInput;
 			String line = "";
 
-
-			while ((userInput = stdIn.readLine()) != null) {
+			while ((userInput = stdIn.readLine()) != "quit") {
 				outprint.println(userInput);
-				System.out.println("echo: " + in.readLine());
+				System.out.println(in.readLine());
 			}
 	
 		}
