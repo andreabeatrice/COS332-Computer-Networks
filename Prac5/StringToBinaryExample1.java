@@ -54,5 +54,5 @@ public class StringToBinaryExample1 {
                                  StringBuilder::append,
                                  StringBuilder::append
                  ).toString();
-}
+    }
 }
