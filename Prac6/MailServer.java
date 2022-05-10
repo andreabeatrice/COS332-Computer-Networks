@@ -138,9 +138,10 @@ public class MailServer
 
 				id=br.readLine();
 
-				if(registerId(id, this)) {
+				if(registerId(id, this) && !id.equals("alarm")) {
 					pw.println("Hi "+id+", you are successfully logged in.");
 				}
+
 
 				while(true){
 
@@ -148,52 +149,63 @@ public class MailServer
 
 					String opt = br.readLine();
 
-					if (opt.contains("helo")) {
+					if (opt.toLowerCase().contains("helo")) {
 						pw.println("250 localhost Hello " + InetAddress.getLocalHost() + ", pleased to meet you");
 					}
+					else {
+						int o = Integer.parseInt(opt);
+						if (!id.equals("alarm")) {
+						
+							switch(o){
 
+								case 1:	System.out.println("Enter Reciver Address : ");
+										String to=br.readLine();
+										System.out.println("Enter Message : ");
+										String body=br.readLine();
 
-					/*switch(opt){
+										sendMessage(id,to,body);
 
-						case 1:	System.out.println("Enter Reciver Address : ");
-								String to=br.readLine();
-								System.out.println("Enter Message : ");
-								String body=br.readLine();
+										pw.println("Mail sent to: " + to + "\n");
+								break;
 
-								sendMessage(id,to,body);
+								case 2:	
+									ArrayList<message>al=getMessages(id);
+										if(al.size()==0) {
+											pw.println("No messages");
+											
+										}
+										else {
+											for(int i=0; i < al.size();i++){
+												message m=al.get(i);
+												pw.println("From: "+m.from);
 
-								pw.println("Mail sent to: " + to + "\n");
-						break;
+												pw.println("Message: "+m.message+"\n");
+											}
+										}
 
-						case 2	:	
-							ArrayList<message>al=getMessages(id);
-								if(al.size()==0) {
-									pw.println("No messages");
-									
-								}
-								else {
-									for(int i=0; i < al.size();i++){
-										message m=al.get(i);
-										pw.println("From: "+m.from);
+								break;
+								case 3	:	
+										pw.println("You are successfully logged out ..");
+										logout(id);
+										s.close();
+										System.exit(0);
+								break;
+								default	:	
+									 
 
-										pw.println("Message: "+m.message);
-									}
-								}
+								break;
+							}
+						}
+						else {
+							sendMessage("alert@alarmsystem.com","andrea@localhost.com", "Suspicious activity at house");
+							pw.println("Mail sent to: andrea@localhost.com" +  "\n");
+						}
+					}			
 
 								
-
-						break;
-						case 3	:	
-								pw.println("You are successfully logged out ..");
-								logout(id);
-								s.close();
-								System.exit(0);
-						break;
-						default	:	
-
-						break;
-					}*/
+							
 				}
+
 			} catch(Exception e){}
 		}
 	}

@@ -1,127 +1,103 @@
-// SMTPDemo.java
-
 import java.io.*;
 import java.net.*;
-
-class SMTPDemo
+public class SMTPDemo
 {
-  public static void main (String [] args)
-  {
-   String SMTPServer = "mail.gatewest.net";
-   int SMTPPort = 25;
 
-   Socket client = null;
+private boolean run = true;
 
-   try
-   {
-     // Attempt to create a client socket connected to the SMTP 
-     // server.
-     // program.
+	public static void main(String[] args) {
+		try{
+			new SMTPDemo().connect();
+		}
+		catch(Exception e){
+		
+		}
+	}
+	
+	public void connect() throws Exception{
 
-     client = new Socket (SMTPServer, SMTPPort);
+		Socket s = new Socket("localhost", 25);
+		
+		PrintWriter pw=new PrintWriter(s.getOutputStream(),true);
 
-     // Create a buffered reader for line-oriented reading from the
-     // standard input device.
+		BufferedReader br=new BufferedReader(new InputStreamReader(s.getInputStream()));
 
-     BufferedReader stdin;
-     stdin = new BufferedReader (new InputStreamReader (System.in));
+		BufferedReader bf=new BufferedReader(new InputStreamReader(System.in));
+			
+		new Thread(new Runnable() {
+			public void run(){
+				while(run) {
+					try {
+						String msg=br.readLine();
+						
+						if(msg!=null)
+							System.out.println(msg);
+						
+						else run=false;
+					}
+					catch(Exception e){
 
-     // Create a buffered reader for line-oriented reading from the
-     // socket.
+					}
+				}
+			}
 
-     InputStream is = client.getInputStream ();
-     BufferedReader sockin;
-     sockin = new BufferedReader (new InputStreamReader (is));
+		}).start();
 
-     // Create a print writer for line-oriented writing to the 
-     // socket.
+		String id;
 
-     OutputStream os = client.getOutputStream ();
-     PrintWriter sockout;
-     sockout = new PrintWriter (os, true); // true for auto-flush
+		boolean val;
+			
+		pw.println("");
+		
+		while(true) {
 
-     // Display SMTP greeting from SMTP server program.
+			String opt = bf.readLine();
+			
+			pw.println(opt);
 
-     System.out.println ("S:" + sockin.readLine ());
+			if (opt.toLowerCase().contains("helo")) {
+				pw.println(bf.readLine()); 
+			}
 
-     while (true)
-     {
-      // Display a client prompt.
+			        String host = "localhost";
 
-      System.out.print ("C:");
+        // Get system properties
+        Properties properties = System.getProperties();
 
-      // Read a command string from the standard input device.
+        // Setup mail server
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "25");
 
-      String cmd = stdin.readLine ();
 
-      // Write the command string to the SMTP server program.
+			Session session = Session.getInstance(properties);
 
-      sockout.println (cmd);
+        session.setDebug(true);
 
-      // Read a reply string from the SMTP server program.
 
-      String reply = sockin.readLine ();
+        // Used to debug SMTP issues
 
-      // Display the first line of this reply string.
 
-      System.out.println ("S:" + reply);
+        try {
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
 
-      // If the DATA command was entered and it succeeded, keep
-      // writing all lines until a line is detected that begins
-      // with a . character. These lines constitute an email
-      // message.
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress("alarm@localhost.com"));
 
-      if (cmd.toLowerCase ().startsWith ("data") &&
-        reply.substring (0, 3).equals ("354"))
-      {
-        do
-        {
-          cmd = stdin.readLine ();
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress("u19130938@tuks.co.za"));
 
-          if (cmd != null && cmd.length () > 1 &&
-            cmd.charAt (0) == '.')
-            cmd = "."; // Must be no chars after . char.
+            message.setSubject("This is the Subject Line!");
 
-          sockout.println (cmd);
+            message.setText("This is actual message");
 
-          if (cmd.equals ("."))
-            break;
+            Transport.send(message);
+
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+            System.exit(0);
         }
-        while (true);
 
-        // Read a reply string from the SMTP server program.
-
-        reply = sockin.readLine ();
-
-        // Display the first line of this reply string.
-
-        System.out.println ("S:" + reply);
-
-        continue;
-      }
-
-      // If the QUIT command was entered, quit.
-
-      if (cmd.toLowerCase ().startsWith ("quit"))
-        break;
-     }
-   }
-   catch (IOException e)
-   {
-     System.out.println (e.toString ());
-   }
-   finally
-   {
-     try
-     {
-      // Attempt to close the client socket.
-
-      if (client != null)
-        client.close ();
-     }
-     catch (IOException e)
-     {
-     }
-   }
-  }
+			
+		}
+	}
 }

@@ -45,7 +45,7 @@ private boolean run = true;
 
 		String id;
 
-		boolean val;
+		boolean val, alarm;
 			
 		do {
 			id=bf.readLine();
@@ -53,13 +53,18 @@ private boolean run = true;
 			String emailreg="^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(\\.[_A-Za-z]{2,})$";
 
 			val=id.matches(emailreg);
+			alarm = id.equals("alarm");
 
-			if(!val)System.out.println("Wrong format email-id.please re-enter.");
-		} while(!val);
+			if(!val && !alarm )System.out.println("Wrong format email-id.please re-enter.");
+		} while(!val && !alarm );
 
 		pw.println(id);
-		
+
+		if (!alarm) {
 			System.out.println("\n Menu\n1)Send Mail\n2)Inbox\n3)Logout");
+		}
+		
+			
 		while(true) {
 			//System.out.println("\n Menu\n1)Send Mail\n2)Inbox\n3)Logout");
 
@@ -70,28 +75,42 @@ private boolean run = true;
 			if (opt.toLowerCase().contains("helo")) {
 				pw.println(bf.readLine()); 
 			}
+			else {
+				int o = Integer.parseInt(opt);
+				if (!alarm){
+					switch(o) {
+						case 1: System.out.println("Send To:");
+								pw.println(bf.readLine());
+								System.out.println("Message:");
+								pw.println(bf.readLine()); 
+						break;
+						
+						//TODO: FIX
+						case 2:
+							pw.println(bf.readLine());
+							//System.exit(0);
+						break;
 
-/*			switch(n) {
-				case 1: System.out.println("Send To:");
-						pw.println(bf.readLine());
-						System.out.println("Message:");
-						pw.println(bf.readLine()); 
-				break;
+						case 3:
+							pw.println(bf.readLine());
+							s.close();
+							System.exit(0);
+						break;
+						case 5:
+							pw.println(bf.readLine());
+						break;
+						default	:	
+							pw.println(bf.readLine());
+						break;
+					}
+				}
+				else {
+					pw.println(bf.readLine());
+				}
 				
-				//TODO: FIX
-				case 2:
-					pw.println(bf.readLine());
-					//System.exit(0);
-				break;
+			}
 
-				case 3:
-					pw.println(bf.readLine());
-					System.exit(0);
-				break;
-				default	:	
-
-				break;
-			}*/
+			
 
 			
 		}
