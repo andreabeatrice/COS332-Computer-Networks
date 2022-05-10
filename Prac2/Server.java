@@ -27,7 +27,7 @@ public class Server{
 
 			output = new PrintWriter(socket.getOutputStream(), true);
 			
-	BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 			output.println("Connected" );
 			output.write(13);
