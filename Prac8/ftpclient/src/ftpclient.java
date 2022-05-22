@@ -109,9 +109,14 @@ public class ftpclient {
                             Date date = new Date(lastModified);
 
                             if (date.after(dateComp)){
-                                System.out.println("Given file was last modified at: ");
-                                System.out.println(date);//pw.println(userCmd);
+                                System.out.println("index.html was updated at: " + date);
+                                //System.out.println();//pw.println(userCmd);
+                                dateComp = new Date(lastModified);
                             }
+
+                            //if usr said stop
+                            bf.readLine();
+
 
                         }
                     }
