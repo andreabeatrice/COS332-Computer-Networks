@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -10,7 +11,15 @@ public class ftpclient {
     private Socket socket = null;
     public static DataInputStream input = null;
     public static DataOutputStream out = null;
+
+    public static BufferedReader br = null;
+
+    public static BufferedReader bf = null;
+
+    public static PrintWriter pw = null;
     public static String ADDRESS = "";
+
+    private static boolean DEBUG = false;
     public static String USER = null;
     public static String PASSWORD = null;
 
@@ -18,11 +27,11 @@ public class ftpclient {
         try {
             socket = new Socket(address, port);
 
-            PrintWriter pw = new PrintWriter(socket.getOutputStream(),true);
+             pw = new PrintWriter(socket.getOutputStream(),true);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+            bf = new BufferedReader(new InputStreamReader(System.in));
 
 
 
@@ -101,8 +110,6 @@ public class ftpclient {
                         Date dateComp = new Date(lastModifiedOriginal);
 
                         while (fileWatch){
-                            //System.out.println(msg);
-                            //System.out.print("ftp> ");
 
                             //Getting the last modified time
                             long lastModified = file.lastModified();
@@ -112,11 +119,9 @@ public class ftpclient {
                                 System.out.println("index.html was updated at: " + date);
                                 //System.out.println();//pw.println(userCmd);
                                 dateComp = new Date(lastModified);
+
+                                System.out.println(stor(new FileInputStream(file), file.getName()));
                             }
-
-                            //if usr said stop
-                            bf.readLine();
-
 
                         }
                     }
@@ -135,6 +140,78 @@ public class ftpclient {
         catch (IOException i){
             System.out.println(i);
         }
+    }
+
+
+    public boolean stor(InputStream inputStream, String filename) throws IOException {
+
+        BufferedInputStream input = new BufferedInputStream(inputStream);
+
+        sendLine("PASV");
+        String response = readLine();
+        if (!response.startsWith("227 ")) {
+            throw new IOException("SimpleFTP could not request passive mode: "
+                    + response);
+        }
+
+        String ip = null;
+        int port = -1;
+        int opening = response.indexOf('(');
+        int closing = response.indexOf(')', opening + 1);
+        if (closing > 0) {
+            String dataLink = response.substring(opening + 1, closing);
+            StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
+            try {
+                ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
+                        + tokenizer.nextToken() + "." + tokenizer.nextToken();
+                port = Integer.parseInt(tokenizer.nextToken()) * 256
+                        + Integer.parseInt(tokenizer.nextToken());
+            } catch (Exception e) {
+                throw new IOException("SimpleFTP received bad data link information: "
+                        + response);
+            }
+        }
+
+        pw.println("STOR " + filename);
+
+        Socket dataSocket = new Socket(ip, port);
+
+        response = br.readLine();
+
+        System.out.println(response);
+
+        BufferedOutputStream output = new BufferedOutputStream(dataSocket
+                .getOutputStream());
+        byte[] buffer = new byte[4096];
+        int bytesRead = 0;
+        while ((bytesRead = input.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+        }
+        output.flush();
+        output.close();
+        input.close();
+
+        response = readLine();
+        return response.startsWith("226 ");
+    }
+
+    private void sendLine(String line) throws IOException {
+        if (socket == null) {
+            throw new IOException("SimpleFTP is not connected.");
+        }
+        pw.write(line + "\r\n");
+        pw.flush();
+        if (DEBUG) {
+            System.out.println("> " + line);
+        }
+    }
+
+    private String readLine() throws IOException {
+        String line = br.readLine();
+        if (DEBUG) {
+            System.out.println("< " + line);
+        }
+        return line;
     }
     public static void main(String [] args){
         input = new DataInputStream(System.in);
