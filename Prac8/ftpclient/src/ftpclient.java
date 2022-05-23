@@ -23,6 +23,10 @@ public class ftpclient {
     public static String USER = null;
     public static String PASSWORD = null;
 
+    String filePath = "src/index.html";
+    //Creating the File object
+    File file = new File(filePath);
+
     public ftpclient (String address, int port, boolean passive){
         try {
             socket = new Socket(address, port);
@@ -90,7 +94,7 @@ public class ftpclient {
                                     pw.println("QUIT");
                                     break;
                                 case "put":
-                                    pw.println("put index.html");
+                                    stor(new FileInputStream(file), file.getName());
                                     break;
                                 case "watch":
                                     fileWatch = true;
@@ -101,9 +105,7 @@ public class ftpclient {
 
                         }
 
-                        String filePath = "src/index.html";
-                        //Creating the File object
-                        File file = new File(filePath);
+
 
                         //Getting the last modified time
                         long lastModifiedOriginal = file.lastModified();
@@ -121,6 +123,7 @@ public class ftpclient {
                                 dateComp = new Date(lastModified);
 
                                 System.out.println(stor(new FileInputStream(file), file.getName()));
+                                System.out.print("ftp> ");
                             }
 
                         }
@@ -143,12 +146,12 @@ public class ftpclient {
     }
 
 
-    public boolean stor(InputStream inputStream, String filename) throws IOException {
+    public String stor(InputStream inputStream, String filename) throws IOException {
 
         BufferedInputStream input = new BufferedInputStream(inputStream);
 
-        sendLine("PASV");
-        String response = readLine();
+        pw.println("PASV");
+        String response = br.readLine();
         if (!response.startsWith("227 ")) {
             throw new IOException("SimpleFTP could not request passive mode: "
                     + response);
@@ -191,28 +194,10 @@ public class ftpclient {
         output.close();
         input.close();
 
-        response = readLine();
-        return response.startsWith("226 ");
+        response = br.readLine();
+        return response;
     }
 
-    private void sendLine(String line) throws IOException {
-        if (socket == null) {
-            throw new IOException("SimpleFTP is not connected.");
-        }
-        pw.write(line + "\r\n");
-        pw.flush();
-        if (DEBUG) {
-            System.out.println("> " + line);
-        }
-    }
-
-    private String readLine() throws IOException {
-        String line = br.readLine();
-        if (DEBUG) {
-            System.out.println("< " + line);
-        }
-        return line;
-    }
     public static void main(String [] args){
         input = new DataInputStream(System.in);
 
