@@ -37,7 +37,7 @@ public class ftpclient {
 
             bf = new BufferedReader(new InputStreamReader(System.in));
 
-
+            Date dateComp = null;
 
             boolean connectionOpen = true;
             boolean fileWatch = false;
@@ -96,7 +96,27 @@ public class ftpclient {
                                 case "put":
                                     stor(new FileInputStream(file), file.getName());
                                     break;
+                                case "get":
+                                    System.out.println(retr(file.getName()));
+                                    System.out.print("ftp> ");
+                                    break;
                                 case "watch":
+                                    File f = new File("src/index.html");
+
+                                    if (!f.exists()){
+                                        System.out.println("index.html does not exist locally. Would you like to get it from the server? Y/N ");
+                                        String getFileFromServer = bf.readLine();
+
+                                        if (getFileFromServer.equalsIgnoreCase("Y")){
+                                            System.out.println(retr(file.getName()));
+                                        }
+                                    }
+
+                                    //Getting the last modified time
+                                    long lastModifiedOriginal = file.lastModified();
+                                    dateComp = new Date(lastModifiedOriginal);
+                                    System.out.println("Watching " + filePath + ": last updated at " + dateComp);
+
                                     fileWatch = true;
                                     break;
                                 default:
@@ -105,25 +125,19 @@ public class ftpclient {
 
                         }
 
-
-
-                        //Getting the last modified time
-                        long lastModifiedOriginal = file.lastModified();
-                        Date dateComp = new Date(lastModifiedOriginal);
-
                         while (fileWatch){
 
                             //Getting the last modified time
+
                             long lastModified = file.lastModified();
                             Date date = new Date(lastModified);
 
                             if (date.after(dateComp)){
                                 System.out.println("index.html was updated at: " + date);
-                                //System.out.println();//pw.println(userCmd);
                                 dateComp = new Date(lastModified);
 
                                 System.out.println(stor(new FileInputStream(file), file.getName()));
-                                System.out.print("ftp> ");
+
                             }
 
                         }
@@ -151,6 +165,8 @@ public class ftpclient {
         BufferedInputStream input = new BufferedInputStream(inputStream);
 
         pw.println("PASV");
+
+
         String response = br.readLine();
         if (!response.startsWith("227 ")) {
             throw new IOException("SimpleFTP could not request passive mode: "
@@ -158,18 +174,22 @@ public class ftpclient {
         }
 
         String ip = null;
+
         int port = -1;
+
         int opening = response.indexOf('(');
+
         int closing = response.indexOf(')', opening + 1);
+
         if (closing > 0) {
             String dataLink = response.substring(opening + 1, closing);
             StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
             try {
-                ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
-                        + tokenizer.nextToken() + "." + tokenizer.nextToken();
-                port = Integer.parseInt(tokenizer.nextToken()) * 256
-                        + Integer.parseInt(tokenizer.nextToken());
-            } catch (Exception e) {
+                ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "." + tokenizer.nextToken() + "." + tokenizer.nextToken();
+
+                port = Integer.parseInt(tokenizer.nextToken()) * 256 + Integer.parseInt(tokenizer.nextToken());
+            }
+            catch (Exception e) {
                 throw new IOException("SimpleFTP received bad data link information: "
                         + response);
             }
@@ -183,18 +203,87 @@ public class ftpclient {
 
         System.out.println(response);
 
-        BufferedOutputStream output = new BufferedOutputStream(dataSocket
-                .getOutputStream());
+        BufferedOutputStream output = new BufferedOutputStream(dataSocket.getOutputStream());
+
         byte[] buffer = new byte[4096];
+
         int bytesRead = 0;
+
         while ((bytesRead = input.read(buffer)) != -1) {
             output.write(buffer, 0, bytesRead);
         }
+
         output.flush();
         output.close();
         input.close();
 
         response = br.readLine();
+        return response;
+    }
+
+    public String retr(String filename) throws IOException {
+
+        pw.println("PASV");
+
+
+        String response = br.readLine();
+        if (!response.startsWith("227 ")) {
+            throw new IOException("SimpleFTP could not request passive mode: "
+                    + response);
+        }
+
+        String ip = null;
+
+        int port = -1;
+
+        int opening = response.indexOf('(');
+
+        int closing = response.indexOf(')', opening + 1);
+
+        if (closing > 0) {
+            String dataLink = response.substring(opening + 1, closing);
+            StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
+            try {
+                ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "." + tokenizer.nextToken() + "." + tokenizer.nextToken();
+
+                port = Integer.parseInt(tokenizer.nextToken()) * 256 + Integer.parseInt(tokenizer.nextToken());
+            }
+            catch (Exception e) {
+                throw new IOException("SimpleFTP received bad data link information: "
+                        + response);
+            }
+        }
+
+        pw.println("RETR " + "index.html");
+
+        Socket dataSocket = new Socket(ip, port);
+
+        response = br.readLine();
+
+        System.out.println(response);
+
+        BufferedInputStream input = new BufferedInputStream(dataSocket.getInputStream());
+
+        BufferedOutputStream output = new BufferedOutputStream(dataSocket.getOutputStream());
+
+        char[] buffer = new char[4096];
+
+        int bytesRead = 0;
+
+        response = br.readLine();
+
+        String contents = new String(input.readAllBytes());
+
+        File getFile = new File("src/index.html");
+        getFile.createNewFile();
+        FileWriter myWriter = new FileWriter(getFile);
+        myWriter.write(contents);
+
+        myWriter.close();
+        output.flush();
+        output.close();
+        input.close();
+
         return response;
     }
 
