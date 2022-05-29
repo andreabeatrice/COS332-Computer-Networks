@@ -38,9 +38,10 @@ public class ServerListenerThread extends Thread {
                 //output.write(redData);
 
                 redDataText = new String(redData); // assumption that client sends data UTF-8 encoded
-                System.out.print("SLT" + red + " ");
+                System.out.println("SLT-" + red + " ");
                 clientData.append(redDataText);
                 output.write(red);
+                output.flush();
 
             }
         }catch (IOException e) {
