@@ -17,6 +17,8 @@ public class Proxy{
 
     private BufferedReader tServerResponse = null; //br
 
+    private DataOutputStream tServerOutput = null; //out
+
 	public Proxy(int port){
 
 		try{
@@ -42,12 +44,24 @@ public class Proxy{
 
 			tServerResponse = new BufferedReader(new InputStreamReader(clientActor.getInputStream()));
 
-			String msg = tServerResponse.readLine();
+			tServerOutput = new DataOutputStream(clientActor.getOutputStream());
 
-			//System.out.println(msg);
-			proxyOutputWriter.println(msg);
+			String line = "";
 
+			
+			while (!line.equals("QUIT")) {
+				try {
+					line = wClientInputReader.readLine();
+					tServerOutput.writeUTF(line);
+				}
+				catch (IOException i){
+					System.out.println(i);
+				}
+			}
 
+		}
+		catch (UnknownHostException u ){
+			System.out.println(u);
 		}
 		catch (IOException i){
 			System.out.println(i);
