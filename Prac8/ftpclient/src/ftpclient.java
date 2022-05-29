@@ -31,7 +31,7 @@ public class ftpclient {
         try {
             socket = new Socket(address, port);
 
-             pw = new PrintWriter(socket.getOutputStream(),true);
+            pw = new PrintWriter(socket.getOutputStream(),true);
 
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
