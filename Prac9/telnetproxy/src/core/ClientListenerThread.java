@@ -42,7 +42,7 @@ public class ClientListenerThread extends Thread{
                 redDataText = new String(redData); // assumption that client sends data UTF-8 encoded
                 System.out.println("CLT-" + red + " ");
                 clientData.append(redDataText);
-                pw.println(red);
+                pw.write(red);
                 pw.flush();
             }
         } catch (IOException e) {

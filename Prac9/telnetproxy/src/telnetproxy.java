@@ -65,10 +65,8 @@ public class telnetproxy {
         String line = input.readLine();
 
 
-        if (line.contains("telnet") || line.contains("o ")){
-            telnetproxy client = new telnetproxy("10.0.0.2", 23);
+        telnetproxy client = new telnetproxy("10.0.0.2", 23);
 
-        }
 
     }
 }
