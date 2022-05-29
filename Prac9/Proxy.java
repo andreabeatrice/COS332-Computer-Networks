@@ -58,8 +58,6 @@ public class Proxy{
 
 	public static void main(String [] args){
 
-
-
-		//Server server = new Server(PORT);
+		Proxy prxy = new Proxy(55555);
 	}
 }
