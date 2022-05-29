@@ -35,25 +35,20 @@ public class Proxy{
 			
 			BufferedReader wClientInputReader = new BufferedReader(new InputStreamReader(clientAcceptor.getInputStream()));
 
+			try {
 
-			//Connect to telnet server
+				//Connect to telnet server
 
-			clientActor = new Socket("10.0.0.2", 23);
+				clientActor = new Socket("10.0.0.2", 23);
 
-			writeToServer = new PrintWriter(clientActor.getOutputStream(),true);
+				tServerResponse = new BufferedReader(new InputStreamReader(clientActor.getInputStream()));
 
-			tServerResponse = new BufferedReader(new InputStreamReader(clientActor.getInputStream()));
+			} catch(Exception e){
 
-			boolean connectionOpen = true;
-
-			while (connectionOpen) {
-                try {
-                	String msg = tServerResponse.readLine();
-                	System.out.println(msg);
-                } catch(Exception e){
-
-                }
             }
+
+            System.out.println(tServerResponse.readLine());
+            System.out.println("**");
 
 		}
 		catch (UnknownHostException u ){
