@@ -60,10 +60,6 @@ public class telnetproxy {
     }
 
     public static void main(String [] args) throws IOException {
-        DataInputStream input = new DataInputStream(System.in);
-
-        String line = input.readLine();
-
 
         telnetproxy client = new telnetproxy("10.0.0.2", 23);
 
