@@ -43,6 +43,10 @@ public class Proxy{
 
 				tServerResponse = new BufferedReader(new InputStreamReader(clientActor.getInputStream()));
 
+				writeToServer = new PrintWriter(clientActor.getOutputStream(),true);
+
+				pw.println("AYT");
+
 			} catch(Exception e){
 
             }
