@@ -1,4 +1,5 @@
 import core.ClientListenerThread;
+import core.CommandListenerThread;
 import core.ServerListenerThread;
 
 import java.io.*;
@@ -35,10 +36,10 @@ public class telnetproxy {
 
             output = new PrintWriter(socket.getOutputStream(), true); //, StandardCharsets.ISO_8859_1
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.ISO_8859_1));
+
 
             //Client Actor
-            clientActor = new Socket("10.0.0.2", 23);
+            clientActor = new Socket("10.0.0.2", 23); //Hard coded to connect to S
 
             pw = new PrintWriter(clientActor.getOutputStream(), true);
 
@@ -49,6 +50,7 @@ public class telnetproxy {
 
             ClientListenerThread clt = new ClientListenerThread(socket, clientActor, serverActor);
             clt.start();
+
 
 
         } catch (UnknownHostException e) {

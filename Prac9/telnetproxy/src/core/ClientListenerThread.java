@@ -13,6 +13,12 @@ public class ClientListenerThread extends Thread{
     private PrintWriter output;
     private BufferedReader bf;
 
+    BufferedReader reader;
+
+    StringBuilder clientData = new StringBuilder();;
+
+    String command = "";
+
 
     public ClientListenerThread(Socket clientSocket, Socket clientActor, ServerSocket serverActor) throws IOException {
         this.clientSocket = clientSocket;
@@ -22,6 +28,8 @@ public class ClientListenerThread extends Thread{
         pw = new PrintWriter(clientActor.getOutputStream(), false,StandardCharsets.ISO_8859_1); //,
         bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(),StandardCharsets.ISO_8859_1));
         output = new PrintWriter(clientSocket.getOutputStream(), true);
+
+        reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
     @Override
@@ -30,43 +38,66 @@ public class ClientListenerThread extends Thread{
         try {
             int prevE = 0;
             while (serverActor.isBound() && !serverActor.isClosed()) {
+
                 int red = -1;
 
                 byte[] buffer = new byte[5*1024]; // a read buffer of 5KiB
                 byte[] redData;
                 String redDataText;
+
+
                 red = bf.read();
                 redData = new byte[red];
                 System.arraycopy(buffer, 0, redData, 0, red);
-                //output.write(redData);
 
-                redDataText = new String(redData, "ISO-8859-1"); // assumption that client sends data UTF-8 encoded
-                System.out.println("CLT-" + red + " ");
 
-                if (red == 112){
-                    prevE = red;
+                String x = String.valueOf(((char) red));
+
+                //if lowercase character, append to client data
+                if (red >= 97 && red <= 122 || red == 20){
+                    clientData.append((char) red);
                 }
-                if (prevE == 112 && red == 115){
-                    //bad client >.<
-                    output.println("bad client >.<");
-                    output.write(13);
-                    output.write(10);
-                    prevE = 0;
-                    pw.write(245);
-                    pw.write(13);
-                    pw.flush();
-                    pw.write(10);
-                    pw.flush();
+                else if (red == 13) {  //if CR character, see what's coming next
+                    command = clientData.toString();
+                    clientData = new StringBuilder();
+
+                    if (command.startsWith("ps") ){
+                        System.out.println("ps command registered");
+                        pw.write(127);
+                        pw.flush();
+                        pw.write(127);
+                        pw.flush();
+                    }
+
+                    else if (command.equals("exit")){
+                        pw.write(red);
+                        pw.flush();
+                        serverActor.close();
+                        clientActor.close();
+                        clientSocket.close();
+                        System.exit(0);
+                    }
+
                 }
-                else if (prevE == 112 && red != 115){
-                    prevE = 0;
-                    pw.write(red);
-                    pw.flush();
+                else if (red == 127 && clientData.length() != 0){ //backspace
+                    clientData.deleteCharAt(clientData.length() - 1);
+
+                }
+
+                if (command.startsWith("ps")){
+
+                }
+                else if (command.contains(" ps")) {
+
                 }
                 else {
                     pw.write(red);
                     pw.flush();
                 }
+
+                command = "";
+
+
 
 
             }
