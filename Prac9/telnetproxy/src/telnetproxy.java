@@ -2,11 +2,13 @@ import core.ClientListenerThread;
 import core.CommandListenerThread;
 import core.ServerListenerThread;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 public class telnetproxy {
 
@@ -36,10 +38,17 @@ public class telnetproxy {
 
             output = new PrintWriter(socket.getOutputStream(), true); //, StandardCharsets.ISO_8859_1
 
+            String in = JOptionPane.showInputDialog( "Please enter a host address & port:");
 
+            Scanner sc = new Scanner(in);
+            String ADDRESS = sc.next();
+            int PORT = Integer.parseInt(sc.next()); //towel.blinkenlights.nl 23
+
+            System.out.println(ADDRESS);
+            System.out.println(PORT);
 
             //Client Actor
-            clientActor = new Socket("10.0.0.2", 23); //Hard coded to connect to S
+            clientActor = new Socket(ADDRESS, PORT); //Hard coded to connect to S
 
             pw = new PrintWriter(clientActor.getOutputStream(), true);
 
